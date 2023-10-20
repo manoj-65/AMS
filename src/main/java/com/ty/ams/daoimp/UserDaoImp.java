@@ -12,12 +12,13 @@ public class UserDaoImp implements UserDao {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Override
 
 	public Optional<User> findUserById(int userId) {
 		return userRepository.findById(userId);
 	}
+
 	@Override
 	public User saveUser(User user) {
 		return userRepository.save(user);
@@ -28,17 +29,10 @@ public class UserDaoImp implements UserDao {
 		return userRepository.save(user);
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	@Override
 	public void deleteUser(int id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
