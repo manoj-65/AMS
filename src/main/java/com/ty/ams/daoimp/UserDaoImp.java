@@ -29,12 +29,6 @@ public class UserDaoImp implements UserDao {
 	}
 
 	
-	
-	
-	
-	
-	
-	
 	@Override
 	public void deleteUser(int id) {
 		// TODO Auto-generated method stub
