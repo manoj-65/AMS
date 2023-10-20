@@ -7,4 +7,8 @@ public interface UserDao {
 	User findUserById(long userId);
 
 	User saveUser(User user);
+	
+	
+	
+	void deleteUser(int id);
 }
