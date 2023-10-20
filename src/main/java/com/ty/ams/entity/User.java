@@ -25,22 +25,22 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int user_id;
-	private String emp_id;
+	private int userId;
+	private String empId;
 	private String name;
 	private String email;
 	private String password;
 	@Column(nullable = false, unique = true)
 	private long phone;
-	private UserRole role;
+	private UserRole userRole;
 	private UserStatus userStatus;
 	UserCategory userCategory;
 	@OneToMany
-	private List<TimeSheet> timesheets;
+	private List<TimeSheet> timeSheets;
 	@OneToMany
-	private List<Batch> batches;
-	
+	private List<Batch> batchs;
+
 }
