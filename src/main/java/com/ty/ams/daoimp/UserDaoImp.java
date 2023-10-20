@@ -28,4 +28,17 @@ public class UserDaoImp implements UserDao {
 		return userRepository.save(user);
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void deleteUser(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
