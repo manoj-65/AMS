@@ -4,60 +4,62 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ty.ams.dao.TimeSheetDao;
 import com.ty.ams.entity.TimeSheet;
+import com.ty.ams.repository.TimeSheetRepository;
 
 @Repository
 public class TimeSheetDaoImp implements TimeSheetDao {
 
+	@Autowired
+	TimeSheetRepository timeSheetRepository;
+
 	@Override
 	public TimeSheet saveTimeSheet(TimeSheet timeSheet) {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetRepository.save(timeSheet);
 	}
 
 	@Override
 	public TimeSheet updateTimeSheet(TimeSheet timeSheet) {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetRepository.save(timeSheet);
 	}
 
 	@Override
 	public Optional<TimeSheet> findTimeSheetById(int id) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return timeSheetRepository.findById(id);
 	}
 
 	@Override
 	public void deleteTimeSheetById(int id) {
-		// TODO Auto-generated method stub
-
+		timeSheetRepository.deleteById(id);
 	}
 
 	@Override
 	public List<TimeSheet> findAllTimeSheets() {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetRepository.findAll();
 	}
 
 	@Override
-	public TimeSheet findTimeSheetByDate(LocalDate fromDate, LocalDate toDate) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TimeSheet> findByDateBetween(LocalDate fromDate, LocalDate toDate) {
+		return timeSheetRepository.findByDateBetween(fromDate, toDate);
 	}
 
 	@Override
 	public List<TimeSheet> findAllTimeSheet(int userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return timeSheetRepository.findByUserId(userId);
 	}
 
 	@Override
 	public List<TimeSheet> findAllTimeSheetOfAYear(int year) {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public TimeSheet findByMonthName(String month, int userId) {
+		return timeSheetRepository.findByMonthName(month, userId);
 	}
 
 }
