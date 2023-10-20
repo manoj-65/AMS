@@ -24,15 +24,15 @@ import lombok.Setter;
 public class Batch {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int batch_id;
-	private String batch_code;
-	private String subject_name;
-	private BatchStatus batch_status;
-	private LocalDate batch_started_date;
-	private LocalDate batch_ended_date;
-	private LocalTime login_time;
-	private LocalTime logout_time;
-	private int total_days;
+	private int batchId;
+	private String batchCode;
+	private String subjectName;
+	private BatchStatus batchStatus;
+	private LocalDate batchStartDate;
+	private LocalDate batchEndDate;
+	private LocalTime loginTime;
+	private LocalTime logoutTime;
+	private int totalDays;
 	private BatchMode batchMode;
 	private String instituteName;
 	private String location;
