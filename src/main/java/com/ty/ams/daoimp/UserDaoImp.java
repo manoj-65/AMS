@@ -17,4 +17,17 @@ public class UserDaoImp implements UserDao {
 		return null;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	public void deleteUser(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
