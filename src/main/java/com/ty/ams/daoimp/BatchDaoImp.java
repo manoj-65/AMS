@@ -1,5 +1,7 @@
 package com.ty.ams.daoimp;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import com.ty.ams.dao.BatchDao;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.repository.BatchRepository;
+import com.ty.ams.util.BatchMode;
+import com.ty.ams.util.BatchStatus;
 
 @Repository
 public class BatchDaoImp implements BatchDao {
@@ -33,6 +37,54 @@ public class BatchDaoImp implements BatchDao {
 	@Override
 	public void deleteBatch(int batchId) {
 		batchRepository.deleteById(batchId);
+	}
+
+	@Override
+	public List<Batch> findAllBatchs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Batch findBatchByBatchCode(String batchCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchBySubjectName(String subjectName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchBySubjectNameAndBatchStatus(String subjectName, BatchStatus status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchByStartedDate(LocalDate startDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchByBatchMode(BatchMode mode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Batch> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
