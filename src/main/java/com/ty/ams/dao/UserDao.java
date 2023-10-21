@@ -11,11 +11,11 @@ import com.ty.ams.util.UserStatus;
 
 public interface UserDao {
 
-	Optional<User> findUserById(int userId);
-
 	User saveUser(User user);
 
 	User updateUser(User user);
+
+	Optional<User> findUserById(int userId);
 
 	void deleteUser(int id);
 

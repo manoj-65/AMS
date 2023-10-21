@@ -60,10 +60,7 @@ public class UserDaoImp implements UserDao {
 
 
 
-	@Override
-	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
-		return userRepository.setUserStatusToInAcativeByUserId(userStatus,userId);
-	}
+	
 
 	@Override
 	public List<User> findAllUsers() {
@@ -103,6 +100,12 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public User findUserByPhoneAndPassword(long phone, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
