@@ -1,6 +1,5 @@
 package com.ty.ams.dao;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,12 +16,6 @@ public interface TimeSheetDao {
 
 	List<TimeSheet> findAllTimeSheets();
 
-	List<TimeSheet> findByDateBetween(LocalDate fromDate, LocalDate toDate);
-
 	List<TimeSheet> findAllTimeSheet(int userId);
-
-	List<TimeSheet> findAllTimeSheetOfAYear(int year);
-
-	TimeSheet findByMonthName(String month, int userId);
 
 }
