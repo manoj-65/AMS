@@ -6,13 +6,14 @@ import java.util.Locale.Category;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.UserRepository;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
-
+@Repository
 public class UserDaoImp implements UserDao {
 
 	@Autowired
@@ -57,16 +58,11 @@ public class UserDaoImp implements UserDao {
 		return null;
 	}
 
-	@Override
-	public void deleteUserById(int id) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
-	public User setUserStatusToInAcativeByUserId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
+		return userRepository.setUserStatusToInAcativeByUserId(userStatus,userId);
 	}
 
 	@Override

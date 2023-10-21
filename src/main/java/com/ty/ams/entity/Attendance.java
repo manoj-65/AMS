@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.ty.ams.util.Attendence_status;
+import com.ty.ams.util.AttendenceStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,12 +26,11 @@ public class Attendance {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int attendanceId;
 	private LocalDate date;
-	private LocalTime login_time;
-	private LocalTime logout_time;
-	private Attendence_status attendence_e;
+	private LocalTime loginTime;
+	private LocalTime logoutTime;
+	private AttendenceStatus attendenceStatus;
 	private double totalWorkingHours;
-
 	@ManyToMany
-	private List<Batch>  batch;
-
+	private List<Batch>  batchs;
+	
 }
