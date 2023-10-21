@@ -3,6 +3,8 @@ package com.ty.ams.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +25,9 @@ public class TimeSheet {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int timesheetId;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate start_date;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate end_date;
 	@OneToMany
 	private List<Attendance> attendences;

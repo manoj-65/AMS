@@ -4,15 +4,14 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.UserRepository;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
+
 @Repository
 public class UserDaoImp implements UserDao {
 
@@ -58,13 +57,6 @@ public class UserDaoImp implements UserDao {
 		return null;
 	}
 
-
-
-	@Override
-	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
-		return userRepository.setUserStatusToInAcativeByUserId(userStatus,userId);
-	}
-
 	@Override
 	public List<User> findAllUsers() {
 		// TODO Auto-generated method stub
@@ -103,6 +95,12 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public User findUserByPhoneAndPassword(long phone, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
