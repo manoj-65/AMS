@@ -18,10 +18,6 @@ public class UserDaoImp implements UserDao {
 	@Autowired
 	private UserRepository userRepository;
 
-	@Override
-	public Optional<User> findUserById(int userId) {
-		return userRepository.findById(userId);
-	}
 
 	@Override
 	public User saveUser(User user) {
@@ -32,77 +28,61 @@ public class UserDaoImp implements UserDao {
 	public User updateUser(User user) {
 		return userRepository.save(user);
 	}
+	
+	@Override
+	public Optional<User> findUserById(int userId) {
+		return userRepository.findById(userId);
+	}
 
 	@Override
-	public void deleteUser(int id) {
-		// TODO Auto-generated method stub
-
+	public void deleteUserById(int id) {
+		userRepository.deleteById(id);
 	}
 
 	@Override
 	public Optional<User> findUserByEmpId(String empId) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		return userRepository.findByEmpId(empId);
 	}
 
 	@Override
 	public List<User> findUserByRole(UserRole role) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findByRole(role);
 	}
 
 	@Override
 	public List<User> findUserByCategory(Category category) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findByCategory(category);
 	}
 
 	@Override
 	public List<User> findAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findAll();
 	}
 
 	@Override
-	public User findUserByPhoneNumber(long phone) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<User> findUserByPhoneNumber(long phone) {
+		return userRepository.findByPhone(phone);
 	}
 
 	@Override
-	public User findUserByEmail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<User> findUserByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 
 	@Override
 	public List<User> findUserByStatus(UserStatus status) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findByStatus(status);
 	}
 
 	@Override
-	public User findUserByEmailAndPassword(String email, String password) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<User> findUserByEmailAndPassword(String email, String password) {
+		return userRepository.findByEmailAndPassword(email, password);
 	}
 
-	@Override
-	public List<LocalTime> findBatchTimingsOfUser(int userId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	public User findUserByPhoneAndPassword(long phone, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<User> findUserByPhoneAndPassword(long phone, String password) {
+		return userRepository.findByPhoneAndPassword(phone, password);
 	}
 
 }

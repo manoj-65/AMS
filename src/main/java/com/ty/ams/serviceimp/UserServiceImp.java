@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
+import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.UserService;
 import com.ty.ams.util.UserRole;
@@ -25,7 +27,18 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
-
+		if (user == null)
+			throw new NullPointerException("User Object Is Null no data Found in Request Body...");
+		if (userDaoImp.findUserByPhoneNumber(user.getPhone()).isEmpty())
+			throw new DuplicatePhoneNumberException();
+		if (userDaoImp.findUserByEmail(user.getEmail()).isEmpty())
+			throw new DuplicateEmailException();
+		
+		user.setPassword(user.getPassword().substring(0,4)+(user.getPhone()+"").substring(6,10));
+		
+		user = userDaoImp.saveUser(user);
+		
+		
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("User Saved Successfully...");
@@ -46,31 +59,19 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<String>> deleteUser(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public ResponseEntity<ResponseStructure<Optional<User>>> findUserByEmpId(String empId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<List<User>>> findUserByRole(UserRole role) {
+	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(Category category) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseEntity<ResponseStructure<List<User>>> findAllUsers() {
+	public ResponseEntity<ResponseStructure<String>> deleteUserByUserId(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -88,13 +89,25 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(UserStatus status) {
+	public ResponseEntity<ResponseStructure<List<User>>> findAllUsers() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password) {
+	public ResponseEntity<ResponseStructure<List<User>>> findUserByRole(UserRole role) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(Category category) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(UserStatus status) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -110,14 +123,10 @@ public class UserServiceImp implements UserService {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
-
-		ResponseStructure<User> structure = new ResponseStructure<>();
-		structure.setStatusCode(HttpStatus.OK.value());
-		structure.setMessage("User Status Updated Successfully...");
-		return new ResponseEntity<>(structure, HttpStatus.OK);
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 }
