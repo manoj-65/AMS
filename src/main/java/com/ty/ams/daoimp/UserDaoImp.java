@@ -46,12 +46,12 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public List<User> findUserByRole(UserRole role) {
-		return userRepository.findByRole(role);
+		return userRepository.findByUserRole(role);
 	}
 
 	@Override
 	public List<User> findUserByCategory(Category category) {
-		return userRepository.findByCategory(category);
+		return userRepository.findByUserCategory(category);
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public List<User> findUserByStatus(UserStatus status) {
-		return userRepository.findByStatus(status);
+		return userRepository.findByUserStatus(status);
 	}
 
 	@Override

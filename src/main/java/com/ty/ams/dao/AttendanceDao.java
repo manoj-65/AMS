@@ -3,8 +3,9 @@ package com.ty.ams.dao;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 import com.ty.ams.entity.Attendance;
-import com.ty.ams.util.AttendenceStatus;
+import com.ty.ams.util.AttendanceStatus;
 
 public interface AttendanceDao {
 
@@ -16,10 +17,10 @@ public interface AttendanceDao {
 
 	public void deleteAttendance(int id);
 
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendenceStatus status, String empId);
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendanceStatus status, String empId);
 
 	public List<Attendance> findAllAttendenceByDate(LocalDate date);
 
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date);
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date);
 
 }
