@@ -41,50 +41,38 @@ public class BatchDaoImp implements BatchDao {
 
 	@Override
 	public List<Batch> findAllBatchs() {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findAll();
 	}
 
 	@Override
 	public Batch findBatchByBatchCode(String batchCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findByBatchCode(batchCode);
 	}
 
 	@Override
 	public List<Batch> findBatchBySubjectName(String subjectName) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findBySubjectName(subjectName);
 	}
 
 	@Override
 	public List<Batch> findBatchBySubjectNameAndBatchStatus(String subjectName, BatchStatus status) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findBySubjectNameAndBatchStatus(subjectName, status);
 	}
 
 	@Override
 	public List<Batch> findBatchByStartedDate(LocalDate startDate) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findByBatchStartDate(startDate);
 	}
 
 	@Override
 	public List<Batch> findBatchByBatchMode(BatchMode mode) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findByBatchMode(mode);
 	}
 
 	@Override
 	public List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status) {
-		// TODO Auto-generated method stub
-		return null;
+		return batchRepository.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 
-	@Override
-	public List<Batch> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }
