@@ -4,15 +4,14 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.UserRepository;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
+
 @Repository
 public class UserDaoImp implements UserDao {
 
@@ -57,11 +56,7 @@ public class UserDaoImp implements UserDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
-	
-
+  
 	@Override
 	public List<User> findAllUsers() {
 		// TODO Auto-generated method stub
