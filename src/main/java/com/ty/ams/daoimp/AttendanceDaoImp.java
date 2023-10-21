@@ -49,13 +49,13 @@ public class AttendanceDaoImp implements AttendanceDao {
 	@Override
 	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
 		
-		return findAllAttendenceByDate(date) ;
+		return attendanceRepository.findByDate(date) ;
 	}
 
 	@Override
 	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
 		
-		return findAllAttendanceByAttendanceStatusAndDate(status, date) ;
+		return attendanceRepository.findByAttendanceStatusAndDate(status, date);
 	}
 
 }
