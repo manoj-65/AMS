@@ -3,66 +3,65 @@ package com.ty.ams.daoimp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.ty.ams.dao.AttendanceDao;
 import com.ty.ams.entity.Attendance;
+import com.ty.ams.repository.AttendanceRepository;
 import com.ty.ams.util.AttendenceStatus;
 
+@Repository
 public class AttendanceDaoImp implements AttendanceDao {
 
+	@Autowired
+	private AttendanceRepository attendanceRepository ;
 	
 	public Attendance saveAttendance(Attendance attendance) {
 		
-		return null;
+		return attendanceRepository.save(attendance) ;
+		
 	}
 
 	
 	public Optional<Attendance> findById(int id) {
 		
-		return Optional.empty();
+		return attendanceRepository.findById(id) ;
 	}
 
 	
-	public Optional<Attendance> updateAttendance(Attendance attendance) {
+	public Attendance updateAttendance(Attendance attendance) {
 		
-		return Optional.empty();
+		return attendanceRepository.save(attendance) ;
 	}
 
 	
-	public boolean deleteAttendance(int id) {
+	public void deleteAttendance(int id) {
 		
-		return false;
+		Optional<Attendance> attendance = findById(id) ;
+		attendanceRepository.delete(attendance.get());
 	}
 
-	
-	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status, LocalDate date) {
+
+	@Override
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendenceStatus status, String empId) {
 		
-		return null;
+		return attendanceRepository.findAllAttendanceByAttendanceStatus(status, empId) ;
 	}
 
-	
-	public List<Attendance> findByDate(LocalDate date) {
+
+	@Override
+	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
 		
-		return null;
+		return attendanceRepository.findAllAttendenceByDate(date) ;
 	}
 
-	
+
+	@Override
 	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date) {
 		
-		return null;
-	}
-
-
-	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status, String empId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, String empId) {
-		// TODO Auto-generated method stub
-		return null;
+		return attendanceRepository.findAllAttendanceByAttendanceStatusAndDate(status, date) ;
 	}
 
 }
