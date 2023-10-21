@@ -11,15 +11,19 @@ import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.service.TimeSheetService;
 
 @RestController
-@RequestMapping("ams/timesheet/")
+@RequestMapping("timesheet")
 public class TImeSheetController {
 
 	@Autowired
 	TimeSheetService timeSheetService;
 
-	@PostMapping("/save/userId")
+	@PostMapping("/{userId}")
 	public ResponseEntity<TimeSheet> saveTimeSheet(@RequestBody TimeSheet timeSheet, @PathVariable int userId) {
 		return timeSheetService.saveTimeSheet(timeSheet, userId);
+	}
+
+	public ResponseEntity<TimeSheet> updateTimeSheet(@RequestBody TimeSheet timeSheet) {
+		return timeSheetService.updateTimeSheet(timeSheet);
 	}
 
 }

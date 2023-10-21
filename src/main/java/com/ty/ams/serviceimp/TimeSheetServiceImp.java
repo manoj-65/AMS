@@ -28,10 +28,13 @@ public class TimeSheetServiceImp implements TimeSheetService {
 
 	@Override
 	public ResponseEntity<TimeSheet> saveTimeSheet(TimeSheet timeSheet, int userId) {
-		Optional<User> user = userDao.findUserById(userId);
-		if (user != null) {
-			TimeSheet sheet = timeSheetDao.saveTimeSheet(timeSheet);
-			return new ResponseEntity<>(sheet, HttpStatus.CREATED);
+		Optional<User> optionalUser = userDao.findUserById(userId);
+		if (optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			timeSheetDao.saveTimeSheet(timeSheet);
+			user.getTimeSheets().add(timeSheet);
+			userDao.saveUser(user);
+			return new ResponseEntity<>(timeSheet, HttpStatus.CREATED);
 		}
 		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 	}
