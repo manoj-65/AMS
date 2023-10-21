@@ -1,6 +1,6 @@
 package com.ty.ams.util;
 
-public enum Attendence_status {
+public enum AttendenceStatus {
 	PRESENT, ABSENT, PRESENT_WFH, ABSENT_WFH, WFH, COLLEGE_TRAINING
 }
 
