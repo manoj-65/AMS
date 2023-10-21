@@ -2,12 +2,10 @@ package com.ty.ams.service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
 import com.ty.ams.entity.Batch;
-import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
@@ -27,7 +25,8 @@ public interface BatchService {
 
 	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectName(String subjectName);
 
-	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(String subjectName,BatchStatus status);
+	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(String subjectName,
+			BatchStatus status);
 
 	ResponseEntity<ResponseStructure<List<Batch>>> findBatchByStartedDate(LocalDate startDate);
 
@@ -35,5 +34,5 @@ public interface BatchService {
 
 	ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status);
 
-	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);
+//	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);>>>>>>>b6a48378605cac0d00c102c7f57ebcf34d172c32
 }

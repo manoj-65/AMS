@@ -10,57 +10,52 @@ import org.springframework.stereotype.Repository;
 import com.ty.ams.dao.AttendanceDao;
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.repository.AttendanceRepository;
-import com.ty.ams.util.AttendenceStatus;
+import com.ty.ams.util.AttendanceStatus;
 
 @Repository
 public class AttendanceDaoImp implements AttendanceDao {
 
 	@Autowired
-	private AttendanceRepository attendanceRepository ;
-	
+	private AttendanceRepository attendanceRepository;
+
 	public Attendance saveAttendance(Attendance attendance) {
-		
-		return attendanceRepository.save(attendance) ;
-		
+
+		return attendanceRepository.save(attendance);
+
 	}
 
-	
 	public Optional<Attendance> findById(int id) {
-		
-		return attendanceRepository.findById(id) ;
+
+		return attendanceRepository.findById(id);
 	}
 
-	
 	public Attendance updateAttendance(Attendance attendance) {
-		
-		return attendanceRepository.save(attendance) ;
+
+		return attendanceRepository.save(attendance);
 	}
 
-	
 	public void deleteAttendance(int id) {
-		
-		Optional<Attendance> attendance = findById(id) ;
+
+		Optional<Attendance> attendance = findById(id);
 		attendanceRepository.delete(attendance.get());
+	}
+
+	@Override
+	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendanceStatus status) {
+		
+		return attendanceRepository.findByAttendanceStatus(status) ;
 	}
 
 	@Override
 	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
 		
-		return attendanceRepository.findByDate(date) ;
+		return findAllAttendenceByDate(date) ;
 	}
 
-
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date) {
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
 		
-		return attendanceRepository.findByAttendanceStatusAndDate(status, date) ;
-	}
-
-
-	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status) {
-		
-		return attendanceRepository.findByAttendanceStatus(status) ;
+		return findAllAttendanceByAttendanceStatusAndDate(status, date) ;
 	}
 
 }
