@@ -57,17 +57,6 @@ public class UserDaoImp implements UserDao {
 		return null;
 	}
 
-<<<<<<< HEAD
-
-
-	
-=======
-	@Override
-	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
-		return userRepository.setUserStatusToInAcativeByUserId(userStatus, userId);
-	}
->>>>>>> aabdd49c516fb832bba60b0b0df6b851692b2975
-
 	@Override
 	public List<User> findAllUsers() {
 		// TODO Auto-generated method stub
