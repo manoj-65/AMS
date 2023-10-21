@@ -41,23 +41,21 @@ public class AttendanceDaoImp implements AttendanceDao {
 	}
 
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendanceStatus status, String empId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendanceStatus status) {
+		
+		return attendanceRepository.findByAttendanceStatus(status) ;
 	}
 
 	@Override
 	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return attendanceRepository.findByDate(date) ;
 	}
 
 	@Override
 	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return attendanceRepository.findByAttendanceStatusAndDate(status, date);
 	}
-
-	
 
 }

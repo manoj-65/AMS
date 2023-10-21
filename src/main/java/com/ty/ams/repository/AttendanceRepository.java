@@ -11,6 +11,7 @@ import com.ty.ams.util.AttendanceStatus;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
 	
+
 	List<Attendance> findByAttendanceStatus(AttendanceStatus status) ;
 	
 	List<Attendance> findByDate(LocalDate date) ;
