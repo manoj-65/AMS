@@ -19,42 +19,29 @@ public interface UserService {
 	ResponseEntity<ResponseStructure<User>> updateUser(User user);
 
 	ResponseEntity<ResponseStructure<Optional<User>>> findUserById(int userId);
-
-	ResponseEntity<ResponseStructure<String>> deleteUser(int id);
-
+	
 	ResponseEntity<ResponseStructure<Optional<User>>> findUserByEmpId(String empId);
+	
+	ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password);
+
+	ResponseEntity<ResponseStructure<String>> deleteUserByUserId(int id);
+	
+	ResponseEntity<ResponseStructure<User>> findUserByPhoneNumber(long phone);
+
+	ResponseEntity<ResponseStructure<User>> findUserByEmail(String email);
+	
+	ResponseEntity<ResponseStructure<List<User>>> findAllUsers();
 
 	ResponseEntity<ResponseStructure<List<User>>> findUserByRole(UserRole role);
 
 	ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(Category category);
 
-	ResponseEntity<ResponseStructure<List<User>>> findAllUsers();
-
-	ResponseEntity<ResponseStructure<User>> findUserByPhoneNumber(long phone);
-
-	ResponseEntity<ResponseStructure<User>> findUserByEmail(String email);
-
 	ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(UserStatus status);
-
-	ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password);
 
 	ResponseEntity<ResponseStructure<List<LocalTime>>> findBatchTimingsOfUser(int userId);
 
 	ResponseEntity<ResponseStructure<User>> findUserByPhoneAndPassword(long phone, String password);
 	
 	ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
-
-
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-//	ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
 }

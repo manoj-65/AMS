@@ -198,5 +198,10 @@ public class BatchServiceImp implements BatchService {
 		}
 		return null;
 	}
+//	@Override
+//	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }
