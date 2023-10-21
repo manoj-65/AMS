@@ -1,6 +1,5 @@
 package com.ty.ams.dao;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Optional;
@@ -11,13 +10,13 @@ import com.ty.ams.util.UserStatus;
 
 public interface UserDao {
 
-	Optional<User> findUserById(int userId);
-
 	User saveUser(User user);
 
 	User updateUser(User user);
 
-	void deleteUser(int id);
+	Optional<User> findUserById(int userId);
+
+	void deleteUserById(int id);
 
 	Optional<User> findUserByEmpId(String empId);
 
@@ -25,20 +24,20 @@ public interface UserDao {
 
 	List<User> findUserByCategory(Category category);
 
-	User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
-
 	List<User> findAllUsers();
 
-	User findUserByPhoneNumber(long phone);
+	Optional<User> findUserByPhoneNumber(long phone);
 
-	User findUserByEmail(String email);
+	Optional<User> findUserByEmail(String email);
 
 	List<User> findUserByStatus(UserStatus status);
 
-	User findUserByEmailAndPassword(String email, String password);
+	Optional<User> findUserByEmailAndPassword(String email, String password);
 
-	List<LocalTime> findBatchTimingsOfUser(int userId);
+//	List<LocalTime> findBatchTimingsOfUser(int userId);
 
-	User findUserByPhoneAndPassword(long phone, String password);
+	Optional<User> findUserByPhoneAndPassword(long phone, String password);
+
+//	User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
 
 }

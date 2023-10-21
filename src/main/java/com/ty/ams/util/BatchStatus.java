@@ -1,5 +1,5 @@
 package com.ty.ams.util;
 
 public enum BatchStatus {
-	yet_to_assign, assigned, completed
+	NOT_YET_ASSIGNED, ON_GOING, COMPLETED;
 }
