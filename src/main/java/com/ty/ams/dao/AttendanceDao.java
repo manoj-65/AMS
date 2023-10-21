@@ -16,7 +16,7 @@ public interface AttendanceDao {
 
 	public void deleteAttendance(int id);
 
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendenceStatus status, String empId);
+	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status);
 
 	public List<Attendance> findAllAttendenceByDate(LocalDate date);
 

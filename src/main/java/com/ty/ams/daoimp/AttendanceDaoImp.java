@@ -43,25 +43,24 @@ public class AttendanceDaoImp implements AttendanceDao {
 		attendanceRepository.delete(attendance.get());
 	}
 
-
-	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendenceStatus status, String empId) {
-		
-		return attendanceRepository.findAllAttendanceByAttendanceStatus(status, empId) ;
-	}
-
-
 	@Override
 	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
 		
-		return attendanceRepository.findAllAttendenceByDate(date) ;
+		return attendanceRepository.findByDate(date) ;
 	}
 
 
 	@Override
 	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date) {
 		
-		return attendanceRepository.findAllAttendanceByAttendanceStatusAndDate(status, date) ;
+		return attendanceRepository.findByAttendanceStatusAndDate(status, date) ;
+	}
+
+
+	@Override
+	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status) {
+		
+		return attendanceRepository.findByAttendanceStatus(status) ;
 	}
 
 }
