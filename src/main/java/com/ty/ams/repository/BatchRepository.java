@@ -24,9 +24,11 @@ public interface BatchRepository extends JpaRepository<Batch, Integer> {
 
 	List<Batch> findByBatchMode(BatchMode mode);
 
-	@Query("select b from Batch b where b.user.userId=?1 and b.batchStatus=?2")
-	List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status);
+//	@Query("select b from Batch b where b.user.userId=?1 and b.batchStatus=?2")
+//	List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status);
+	List<Batch> findByUserUserIdAndBatchStatus(int userId, BatchStatus batchStatus);
 
+	List<Batch> findByBatchStartDateBetween(LocalDate startDate, LocalDate endDate);
 //	List<Batch> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);
 
 }
