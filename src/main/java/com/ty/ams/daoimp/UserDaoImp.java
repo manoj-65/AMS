@@ -1,14 +1,11 @@
 package com.ty.ams.daoimp;
 
 import java.time.LocalTime;
-
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.UserRepository;
@@ -61,15 +58,8 @@ public class UserDaoImp implements UserDao {
 	}
 
 	@Override
-	public void deleteUserById(int id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public User setUserStatusToInAcativeByUserId(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId) {
+		return userRepository.setUserStatusToInAcativeByUserId(userStatus, userId);
 	}
 
 	@Override

@@ -25,9 +25,7 @@ public interface UserDao {
 
 	List<User> findUserByCategory(Category category);
 
-	void deleteUserById(int id);
-
-	User setUserStatusToInAcativeByUserId(int id);
+	User setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
 
 	List<User> findAllUsers();
 
