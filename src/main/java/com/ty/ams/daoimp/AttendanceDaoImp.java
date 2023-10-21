@@ -10,58 +10,54 @@ import org.springframework.stereotype.Repository;
 import com.ty.ams.dao.AttendanceDao;
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.repository.AttendanceRepository;
-import com.ty.ams.util.AttendenceStatus;
+import com.ty.ams.util.AttendanceStatus;
 
 @Repository
 public class AttendanceDaoImp implements AttendanceDao {
 
 	@Autowired
-	private AttendanceRepository attendanceRepository ;
-	
+	private AttendanceRepository attendanceRepository;
+
 	public Attendance saveAttendance(Attendance attendance) {
-		
-		return attendanceRepository.save(attendance) ;
-		
+
+		return attendanceRepository.save(attendance);
+
 	}
 
-	
 	public Optional<Attendance> findById(int id) {
-		
-		return attendanceRepository.findById(id) ;
+
+		return attendanceRepository.findById(id);
 	}
 
-	
 	public Attendance updateAttendance(Attendance attendance) {
-		
-		return attendanceRepository.save(attendance) ;
+
+		return attendanceRepository.save(attendance);
 	}
 
-	
 	public void deleteAttendance(int id) {
-		
-		Optional<Attendance> attendance = findById(id) ;
+
+		Optional<Attendance> attendance = findById(id);
 		attendanceRepository.delete(attendance.get());
 	}
 
-
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendenceStatus status, String empId) {
-		
-		return attendanceRepository.findAllAttendanceByAttendanceStatus(status, empId) ;
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndEmployeeID(AttendanceStatus status, String empId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 
 	@Override
 	public List<Attendance> findAllAttendenceByDate(LocalDate date) {
-		
-		return attendanceRepository.findAllAttendenceByDate(date) ;
+		// TODO Auto-generated method stub
+		return null;
 	}
-
 
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date) {
-		
-		return attendanceRepository.findAllAttendanceByAttendanceStatusAndDate(status, date) ;
+	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+	
 
 }

@@ -7,15 +7,15 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ty.ams.entity.Attendance;
-import com.ty.ams.util.AttendenceStatus;
+import com.ty.ams.util.AttendanceStatus;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
 	
-	List<Attendance> findAllAttendanceByAttendanceStatus(AttendenceStatus status, String userId) ;
+	List<Attendance> findByAttendanceStatus(AttendanceStatus status) ;
 	
-	List<Attendance> findAllAttendenceByDate(LocalDate date) ;
+	List<Attendance> findByDate(LocalDate date) ;
 	
-	List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendenceStatus status, LocalDate date) ;
+	List<Attendance> findByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) ;
 
 
 }
