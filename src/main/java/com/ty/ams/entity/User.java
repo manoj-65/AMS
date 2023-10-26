@@ -2,6 +2,8 @@ package com.ty.ams.entity;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
+
 import com.ty.ams.util.UserCategory;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
@@ -30,6 +32,8 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
+	@Column(nullable = false, unique = true)
+	@NonNull
 	private String empId;
 	private String name;
 	private String email;
