@@ -2,7 +2,6 @@ package com.ty.ams.dao;
 
 import java.util.List;
 import java.util.Optional;
-
 import com.ty.ams.entity.TimeSheet;
 
 public interface TimeSheetDao {
@@ -18,4 +17,5 @@ public interface TimeSheetDao {
 
 	List<TimeSheet> findAllTimeSheet(int userId);
 
+	public Optional<TimeSheet> findBytimesheet_id(int id);
 }
