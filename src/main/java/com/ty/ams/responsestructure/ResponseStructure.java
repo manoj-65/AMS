@@ -1,4 +1,4 @@
-package com.ty.ams.responsestructure;
+ package com.ty.ams.responsestructure;
 
 import java.util.Optional;
 

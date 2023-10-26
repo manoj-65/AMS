@@ -3,7 +3,6 @@ package com.ty.ams.controller;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale.Category;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -127,7 +124,7 @@ public class UserController {
 	@Operation(description = "Fetching / Find User by UserStatus", summary = "To Find User Object By UserStatus...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided UserStatus...", responseCode = "404") })
-	@GetMapping("/statsu/{status}")
+	@GetMapping("/status/{status}")
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(@PathVariable UserStatus status) {
 		return userServiceImp.findUserByStatus(status);
 	}
@@ -147,6 +144,7 @@ public class UserController {
 	@PatchMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(@PathVariable int userId) {
 		return userServiceImp.setUserStatusToInAcativeByUserId(userId);
+
 	}
 
 }
