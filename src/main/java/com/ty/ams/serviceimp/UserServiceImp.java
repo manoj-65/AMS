@@ -40,8 +40,8 @@ public class UserServiceImp implements UserService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
-		if (user == null)
-			throw new NullPointerException("User Object Is Null no data Found in Request Body...");
+//		if (user == null)
+//			throw new NullPointerException("User Object Is Null no data Found in Request Body...");
 		if (!Pattern.compile("[6-9]{1}[0-9]{9}").matcher("" + user.getPhone()).matches())
 			throw new InvalidPhoneNumberException();
 		if (userDaoImp.findUserByPhoneNumber(user.getPhone()).isPresent())
