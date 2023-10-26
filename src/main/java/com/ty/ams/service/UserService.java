@@ -18,9 +18,9 @@ public interface UserService {
 
 	ResponseEntity<ResponseStructure<User>> updateUser(User user);
 
-	ResponseEntity<ResponseStructure<Optional<User>>> findUserById(int userId);
+	ResponseEntity<ResponseStructure<User>> findUserById(int userId);
 	
-	ResponseEntity<ResponseStructure<Optional<User>>> findUserByEmpId(String empId);
+	ResponseEntity<ResponseStructure<User>> findUserByEmpId(String empId);
 	
 	ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password);
 
@@ -42,6 +42,6 @@ public interface UserService {
 
 	ResponseEntity<ResponseStructure<User>> findUserByPhoneAndPassword(long phone, String password);
 	
-	ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(UserStatus userStatus, int userId);
+	ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(int userId);
 	
 }
