@@ -42,12 +42,13 @@ public class UserServiceImp implements UserService {
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
 		if (user == null)
 			throw new NullPointerException("User Object Is Null no data Found in Request Body...");
+		if (!Pattern.compile("[6-9]{1}[0-9]{9}").matcher("" + user.getPhone()).matches())
+			throw new InvalidPhoneNumberException();
 		if (userDaoImp.findUserByPhoneNumber(user.getPhone()).isPresent())
 			throw new DuplicatePhoneNumberException();
 		if (userDaoImp.findUserByEmail(user.getEmail()).isPresent())
 			throw new DuplicateEmailException();
-		if (!Pattern.compile("[6-9]{1}[0-9]{9}").matcher("" + user.getPhone()).matches())
-			throw new InvalidPhoneNumberException();
+		
 		user.setPassword(user.getEmail().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
 		user = userDaoImp.saveUser(user);
 		ResponseStructure<User> structure = new ResponseStructure<>();
