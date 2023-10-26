@@ -33,12 +33,8 @@ public class UserServiceImp implements UserService {
 			throw new DuplicatePhoneNumberException();
 		if (userDaoImp.findUserByEmail(user.getEmail()).isEmpty())
 			throw new DuplicateEmailException();
-		
-		user.setPassword(user.getPassword().substring(0,4)+(user.getPhone()+"").substring(6,10));
-		
+		user.setPassword(user.getPassword().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
 		user = userDaoImp.saveUser(user);
-		
-		
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("User Saved Successfully...");

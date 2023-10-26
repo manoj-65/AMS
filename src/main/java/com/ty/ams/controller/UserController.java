@@ -27,8 +27,7 @@ public class UserController {
 	}
 
 	@PatchMapping
-	public ResponseEntity<ResponseStructure<User>> saveUser(@RequestParam String userStatus,
-			@RequestParam int userId) {
+	public ResponseEntity<ResponseStructure<User>> saveUser(@RequestParam String userStatus, @RequestParam int userId) {
 		return userServiceImp.setUserStatusToInAcativeByUserId(UserStatus.valueOf(userStatus), userId);
 	}
 

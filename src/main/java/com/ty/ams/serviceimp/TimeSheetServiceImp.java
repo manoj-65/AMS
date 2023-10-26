@@ -1,5 +1,6 @@
 package com.ty.ams.serviceimp;
 
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import com.ty.ams.dao.TimeSheetDao;
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.timesheet.TimeSheetAlreadyExists;
 import com.ty.ams.service.TimeSheetService;
 
 @Service
@@ -30,13 +32,42 @@ public class TimeSheetServiceImp implements TimeSheetService {
 	public ResponseEntity<TimeSheet> saveTimeSheet(TimeSheet timeSheet, int userId) {
 		Optional<User> optionalUser = userDao.findUserById(userId);
 		if (optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			timeSheetDao.saveTimeSheet(timeSheet);
-			user.getTimeSheets().add(timeSheet);
-			userDao.saveUser(user);
-			return new ResponseEntity<>(timeSheet, HttpStatus.CREATED);
+			LocalDate currentDate = LocalDate.now();
+			List<TimeSheet> listOfTimeSheets = optionalUser.get().getTimeSheets();
+			if (listOfTimeSheets != null) {
+				Optional<TimeSheet> timesheet = listOfTimeSheets.stream()
+						.filter(sheet -> sheet.getStart_date().getMonth().equals(currentDate.getMonth())
+								&& timeSheet.getStart_date().getYear() == currentDate.getYear())
+						.findAny();
+				if (timesheet.isPresent()) {
+					throw new TimeSheetAlreadyExists();
+				} else {
+					User user = optionalUser.get();
+					int month = currentDate.getMonth().getValue();
+					int year = currentDate.getYear();
+					if (month == 12) {
+						year += 1;
+						timeSheet.setEnd_date(LocalDate.parse("'" + year + "'-'" + month + 1 + "'-26"));
+					} else {
+						timeSheet.setEnd_date(LocalDate.parse("'" + year + "'-'" + month + 1 + "'-25"));
+					}
+					timeSheetDao.saveTimeSheet(timeSheet);
+					user.getTimeSheets().add(timeSheet);
+					userDao.saveUser(user);
+					return new ResponseEntity<>(timeSheet, HttpStatus.CREATED);
+				}
+			} else {
+				User user = optionalUser.get();
+				timeSheetDao.saveTimeSheet(timeSheet);
+				user.getTimeSheets().add(timeSheet);
+				userDao.saveUser(user);
+				return new ResponseEntity<>(timeSheet, HttpStatus.CREATED);
+			}
+		} else {
+//			return new UserNotFoundException();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
 	}
 
 	@Override
