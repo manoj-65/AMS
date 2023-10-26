@@ -63,10 +63,13 @@ public class UserController {
 		return userServiceImp.findUserByEmpId(empId);
 	}
 
+	@Operation(description = "User Login validation / Verification, By Username or Password, username will be either Phone Number or Email and password", summary = "User Verification By Credentials ie.. Username and Password username can be Email or Phone Number")
+	@ApiResponses(value = { @ApiResponse(description = "User Verification Successfull...", responseCode = "200"),
+			@ApiResponse(description = "User Verification Failed, Invalid Credentials", responseCode = "404") })
 	@PostMapping("/verify")
-	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(@RequestParam String username,
+	public ResponseEntity<ResponseStructure<User>> veryfyUserByCredentials(@RequestParam String username,
 			@RequestParam String password) {
-		return findUserByEmailAndPassword(username, password);
+		return userServiceImp.verifyUserByCredentials(username, password);
 	}
 
 	@Operation(description = "Deleting User by userId", summary = "To Delete User Object By userId...")
@@ -93,6 +96,10 @@ public class UserController {
 		return userServiceImp.findUserByEmail(email);
 	}
 
+	@Operation(description = "Fetch / Find All Users in the Database...", summary = "To Fetch All The Users From The Database")
+	@ApiResponses(value = { @ApiResponse(description = "All Users Found Successfully...", responseCode = "200"),
+			@ApiResponse(description = "No Users Found in Database...", responseCode = "200"),
+			@ApiResponse(description = "Unable to find All Users...", responseCode = "404") })
 	@GetMapping("/all")
 	public ResponseEntity<ResponseStructure<List<User>>> findAllUsers() {
 		return userServiceImp.findAllUsers();
@@ -128,10 +135,6 @@ public class UserController {
 	@GetMapping("/timings/{userId}")
 	public ResponseEntity<ResponseStructure<List<LocalTime>>> findBatchTimingsOfUser(@PathVariable int userId) {
 		return userServiceImp.findBatchTimingsOfUser(userId);
-	}
-
-	public ResponseEntity<ResponseStructure<User>> findUserByPhoneAndPassword(long phone, String password) {
-		return userServiceImp.findUserByPhoneAndPassword(phone, password);
 	}
 
 	@Operation(description = "UserStatus Will Updaed to IN_ACTIVE", summary = "UserStatus Will Updaed to IN_ACTIVE")
