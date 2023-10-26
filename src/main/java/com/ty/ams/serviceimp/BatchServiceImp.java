@@ -160,26 +160,12 @@ public class BatchServiceImp implements BatchService {
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(int userId,
 			BatchStatus status) {
-//		List<Batch> ListOfBatch = batchDao.findByUserUserIdAndBatchStatus(userId, status);
-//		System.out.println(ListOfBatch + "list hii");
-//
-//		if (!ListOfBatch.isEmpty()) {
-//			System.out.println(ListOfBatch + "hii");
-//			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure<>();
-//			responseStructure.setBody(ListOfBatch);
-//			responseStructure.setMessage("");
-//			responseStructure.setStatusCode(HttpStatus.OK.value());
-//			return new ResponseEntity<>(responseStructure, HttpStatus.OK);
-//		} else {
-//			return null;
-//		}
 		Optional<User> optional = userDaoImp.findUserById(userId);
 		if(optional.isEmpty()) 
 			throw new IdNotFoundException();
 		List<Batch> batchs = optional.get().getBatchs();
-		System.out.println(batchs.stream().filter(b-> (b.getBatchStatus()+"").equalsIgnoreCase("ON_GOING")).collect(Collectors.toList()));
 		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure<>();
-		responseStructure.setBody(batchs.stream().filter(b-> (b.getBatchStatus()+"").equalsIgnoreCase("ON_GOING")).collect(Collectors.toList()));
+		responseStructure.setBody(batchs.stream().filter(b-> (b.getBatchStatus()+"").equalsIgnoreCase(status.toString())).collect(Collectors.toList()));
 		responseStructure.setMessage("All Batches Found For The BatchStatus : "+status);
 		responseStructure.setStatusCode(HttpStatus.OK.value());
 		return new ResponseEntity<>(responseStructure, HttpStatus.OK);
