@@ -6,6 +6,7 @@ import java.util.Locale.Category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,49 +38,55 @@ public class UserController {
 		return userServiceImp.updateUser(user);
 	}
 
-	@GetMapping
+	@GetMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<User>> findUserById(int userId) {
 		return userServiceImp.findUserById(userId);
 	}
 
-//	@GetMapping
+	@GetMapping("/empid/{empId}")
 	public ResponseEntity<ResponseStructure<User>> findUserByEmpId(String empId) {
 		return userServiceImp.findUserByEmpId(empId);
 	}
 
-	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password) {
-		return findUserByEmailAndPassword(email, password);
+	@PostMapping("/verify")
+	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String username, String password) {
+		return findUserByEmailAndPassword(username, password);
 	}
 
+	@DeleteMapping
 	public ResponseEntity<ResponseStructure<String>> deleteUserByUserId(int userId) {
 		return userServiceImp.deleteUserByUserId(userId);
 	}
 
+	@GetMapping("/phone/{phone}")
 	public ResponseEntity<ResponseStructure<User>> findUserByPhoneNumber(long phone) {
 		return userServiceImp.findUserByPhoneNumber(phone);
 	}
 
+	@GetMapping("/email/{email}")
 	public ResponseEntity<ResponseStructure<User>> findUserByEmail(String email) {
 		return userServiceImp.findUserByEmail(email);
 	}
 
+	@GetMapping("/all")
 	public ResponseEntity<ResponseStructure<List<User>>> findAllUsers() {
 		return userServiceImp.findAllUsers();
 	}
 
+	@GetMapping("/role/{role}")
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByRole(UserRole role) {
 		return userServiceImp.findUserByRole(role);
 	}
-
+	@GetMapping("/category/{category}")
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(Category category) {
 		return userServiceImp.findUserByCategory(category);
 	}
-
+	@GetMapping("/statsu/{status}")
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(UserStatus status) {
 		return userServiceImp.findUserByStatus(status);
 	}
 
-	@GetMapping("/batchtimings")
+	@GetMapping("/timings/{userId}")
 	public ResponseEntity<ResponseStructure<List<LocalTime>>> findBatchTimingsOfUser(int userId) {
 		return userServiceImp.findBatchTimingsOfUser(userId);
 	}

@@ -19,7 +19,7 @@ import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
 import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
-import com.ty.ams.exceptionclasses.user.InvalidEmailAndPasswordException;
+import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberOrPasswordException;
@@ -94,7 +94,7 @@ public class UserServiceImp implements UserService {
 	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password) {
 		Optional<User> optional = userDaoImp.findUserByEmailAndPassword(email, password);
 		if (optional.isEmpty())
-			throw new InvalidEmailAndPasswordException();
+			throw new InvalidEmailOrPasswordException();
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("User Verified Successfully...");
