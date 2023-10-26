@@ -34,5 +34,5 @@ public interface BatchService {
 
 	ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status);
 
-//	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);>>>>>>>b6a48378605cac0d00c102c7f57ebcf34d172c32
+	ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);
 }

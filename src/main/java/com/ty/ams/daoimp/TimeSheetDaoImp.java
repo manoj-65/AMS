@@ -1,4 +1,5 @@
 package com.ty.ams.daoimp;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,4 +48,7 @@ public class TimeSheetDaoImp implements TimeSheetDao {
 		return userDao.findUserById(userId).get().getTimeSheets();
 	}
 
+	public Optional<TimeSheet> findBytimesheet_id(int id) {
+		return timeSheetRepository.findBytimesheet_id(id);
+	}
 }

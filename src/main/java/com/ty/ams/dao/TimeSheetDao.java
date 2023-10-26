@@ -18,4 +18,5 @@ public interface TimeSheetDao {
 
 	List<TimeSheet> findAllTimeSheet(int userId);
 
+	public Optional<TimeSheet> findBytimesheet_id(int id);
 }

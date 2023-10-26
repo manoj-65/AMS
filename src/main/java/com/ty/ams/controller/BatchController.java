@@ -1,5 +1,7 @@
 package com.ty.ams.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.BatchService;
+import com.ty.ams.util.BatchStatus;
 
 @RestController
 @RequestMapping("/batch")
@@ -27,5 +30,12 @@ public class BatchController {
 	@GetMapping("/{batchId}")
 	public ResponseEntity<ResponseStructure<Batch>> findBatchById(@PathVariable int batchId) {
 		return batchService.findBatchById(batchId);
+	}
+
+	@GetMapping("/{userId}/{status}")
+	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(@PathVariable int userId,
+			@PathVariable BatchStatus status) {
+
+		return batchService.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 }
