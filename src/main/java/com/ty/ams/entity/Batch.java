@@ -3,6 +3,7 @@ package com.ty.ams.entity;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
 
@@ -31,7 +32,9 @@ public class Batch {
 	private String subjectName;
 	@Enumerated(EnumType.STRING)
 	private BatchStatus batchStatus;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate batchStartDate;
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate batchEndDate;
 	private LocalTime loginTime;
 	private LocalTime logoutTime;

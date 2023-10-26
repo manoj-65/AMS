@@ -29,20 +29,19 @@ public class BatchServiceImp implements BatchService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
-	
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<Batch>> findBatchById(int batchId) {
 		Optional<Batch> optional = batchDao.findBatchById(batchId);
 		if (optional.isEmpty())
 			throw new IdNotFoundException();
-		
-			ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
-			responseStructure.setBody(optional.get());
-			responseStructure.setMessage("Batch found Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.OK);
-		
+
+		ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
+		responseStructure.setBody(optional.get());
+		responseStructure.setMessage("Batch found Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
@@ -67,16 +66,42 @@ public class BatchServiceImp implements BatchService {
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(int batchId) {
 		Optional<Batch> optional = batchDao.findBatchById(batchId);
 		if (optional.get() != null) {
-			batchDao.deleteBatch(batchId);
+			Batch batch = optional.get();
+			batch.setBatchStatus(BatchStatus.COMPLETED);
+			batchDao.updateBatch(batch);
 			ResponseStructure<String> responseStructure = new ResponseStructure();
 			responseStructure.setBody("");
 			responseStructure.setMessage("Batch Deleted Successfully");
 			responseStructure.setStatusCode(HttpStatus.NO_CONTENT.value());
 			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
+
 		} else {
 			return null;
 		}
 	}
+//		if (optional.get() != null) {
+//			Batch batch = optional.get();
+//			User u = batch.getUser();
+//			if (u != null) {
+//				List<Batch> batchs = u.getBatchs();
+//				for (Batch b : batchs) {
+//					if (b.getBatchCode() == batch.getBatchCode())
+//						batchs.remove(batch);
+//				}
+//				u.setBatchs(batchs);
+//				userDaoImp.updateUser(u);
+//			}
+//
+//			batchDao.deleteBatch(batchId);
+//			ResponseStructure<String> responseStructure = new ResponseStructure();
+//			responseStructure.setBody("");
+//			responseStructure.setMessage("Batch Deleted Successfully");
+//			responseStructure.setStatusCode(HttpStatus.NO_CONTENT.value());
+//			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
+//		} else {
+//			return null;
+//		}
+//}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findAllBatchs() {
@@ -161,12 +186,13 @@ public class BatchServiceImp implements BatchService {
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(int userId,
 			BatchStatus status) {
 		Optional<User> optional = userDaoImp.findUserById(userId);
-		if(optional.isEmpty()) 
+		if (optional.isEmpty())
 			throw new IdNotFoundException();
 		List<Batch> batchs = optional.get().getBatchs();
 		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure<>();
-		responseStructure.setBody(batchs.stream().filter(b-> (b.getBatchStatus()+"").equalsIgnoreCase(status.toString())).collect(Collectors.toList()));
-		responseStructure.setMessage("All Batches Found For The BatchStatus : "+status);
+		responseStructure.setBody(batchs.stream().filter(b -> (b.getBatchStatus() + "").equals(status.toString()))
+				.collect(Collectors.toList()));
+		responseStructure.setMessage("All Batches Found For The BatchStatus : " + status);
 		responseStructure.setStatusCode(HttpStatus.OK.value());
 		return new ResponseEntity<>(responseStructure, HttpStatus.OK);
 	}

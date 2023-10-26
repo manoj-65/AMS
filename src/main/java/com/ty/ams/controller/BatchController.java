@@ -41,7 +41,7 @@ public class BatchController {
 		return batchService.updateBatch(batch);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{batchId}")
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(@PathVariable int batchId) {
 		return batchService.deleteBatch(batchId);
 	}
@@ -51,40 +51,40 @@ public class BatchController {
 		return batchService.findAllBatchs();
 	}
 
-	@GetMapping("/{batchCode}")
+	@GetMapping("/batchcode/{batchCode}")
 	public ResponseEntity<ResponseStructure<Batch>> findBatchByBatchCode(@PathVariable String batchCode) {
 		return batchService.findBatchByBatchCode(batchCode);
 	}
 
-	@GetMapping("/{subjectName}")
+	@GetMapping("/subjectname/{subjectName}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectName(@PathVariable String subjectName) {
 		return batchService.findBatchBySubjectName(subjectName);
 	}
 
-	@GetMapping("/{subjectName}/{status}")
+	@GetMapping("/subjectname-name/{subjectName}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(
 			@PathVariable String subjectName, @PathVariable BatchStatus status) {
 		return batchService.findBatchBySubjectNameAndBatchStatus(subjectName, status);
 	}
 
-	@GetMapping("/{startDate}")
+	@GetMapping("/startdate/{startDate}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByStartedDate(@PathVariable LocalDate startDate) {
 		return batchService.findBatchByStartedDate(startDate);
 	}
 
-	@GetMapping("/{mode}")
+	@GetMapping("/mode/{mode}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByBatchMode(@PathVariable BatchMode mode) {
 		return batchService.findBatchByBatchMode(mode);
 	}
 
-	@GetMapping("/findBatchByUserIdAndBatchStatus/{userId}/{status}")
+	@GetMapping("/userid-status/{userId}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(@PathVariable int userId,
 			@PathVariable BatchStatus status) {
 
 		return batchService.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 
-	@GetMapping("/{fromDate}/{toDate}")
+	@GetMapping("/fromdate-todate/{fromDate}/{toDate}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(@PathVariable LocalDate fromDate,
 			@PathVariable LocalDate toDate) {
 		return batchService.findBatchBetweenDates(fromDate, toDate);
