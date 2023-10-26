@@ -53,7 +53,7 @@ public class UserController {
 		return findUserByEmailAndPassword(username, password);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<String>> deleteUserByUserId(int userId) {
 		return userServiceImp.deleteUserByUserId(userId);
 	}
