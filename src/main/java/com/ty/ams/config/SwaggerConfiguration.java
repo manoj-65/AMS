@@ -14,6 +14,22 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfiguration {
 	
+	@Bean
+	public OpenAPI usersMicroserviceOpenAPI() {
+		Server localhost = new Server();
+		localhost.setUrl("http://hostname:8080");
+		localhost.setDescription("Development environment");
+		Contact contact = new Contact();
+		contact.setEmail("userapp@user.in");
+		contact.setName("User Application");
+		contact.setUrl("https://localhost");
+		License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
+		Info info = new Info().title("User Application RESTful Web Service documentation").version("1.0").contact(contact)
+				.description("This API exposes endpoints to manage Application.")
+				.termsOfService("https://domainname/terms").license(mitLicense);
+		return new OpenAPI().info(info).servers(List.of(localhost));
+	}
+
 	
 	
 }

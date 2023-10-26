@@ -95,6 +95,14 @@ public class UserServiceImp implements UserService {
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
+	public ResponseEntity<ResponseStructure<User>> verifyUserByCredentials(String username,String password){
+		if(Pattern.compile("[6-9]{1}[0-9]{9}").matcher(username).matches())
+			return findUserByPhoneAndPassword(Long.parseLong(username), password);
+		return findUserByEmailAndPassword(username, password);
+	}
+	
+	
+	
 	@Override
 	public ResponseEntity<ResponseStructure<User>> findUserByEmailAndPassword(String email, String password) {
 		Optional<User> optional = userDaoImp.findUserByEmailAndPassword(email, password);
