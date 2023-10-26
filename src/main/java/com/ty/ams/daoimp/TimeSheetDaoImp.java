@@ -1,13 +1,10 @@
 package com.ty.ams.daoimp;
-
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.ty.ams.dao.TimeSheetDao;
+import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.repository.TimeSheetRepository;
 
@@ -16,6 +13,9 @@ public class TimeSheetDaoImp implements TimeSheetDao {
 
 	@Autowired
 	TimeSheetRepository timeSheetRepository;
+
+	@Autowired
+	UserDao userDao;
 
 	@Override
 	public TimeSheet saveTimeSheet(TimeSheet timeSheet) {
@@ -43,26 +43,8 @@ public class TimeSheetDaoImp implements TimeSheetDao {
 	}
 
 	@Override
-	public List<TimeSheet> findByDateBetween(LocalDate fromDate, LocalDate toDate) {
-//		return timeSheetRepository.findByDateBetween(fromDate, toDate);
-		return null;
-	}
-
-	@Override
 	public List<TimeSheet> findAllTimeSheet(int userId) {
-//		return timeSheetRepository.findByUserId(userId);
-		return null;
-	}
-
-	@Override
-	public List<TimeSheet> findAllTimeSheetOfAYear(int year) {
-		return null;
-	}
-
-	@Override
-	public TimeSheet findByMonthName(String month, int userId) {
-//		return timeSheetRepository.findByMonthName(month, userId);
-		return null;
+		return userDao.findUserById(userId).get().getTimeSheets();
 	}
 
 }
