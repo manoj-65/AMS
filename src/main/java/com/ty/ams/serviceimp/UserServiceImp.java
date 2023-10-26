@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale.Category;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +42,14 @@ public class UserServiceImp implements UserService {
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
 		if (user == null)
 			throw new NullPointerException("User Object Is Null no data Found in Request Body...");
+		if (!Pattern.compile("[6-9]{1}[0-9]{9}").matcher("" + user.getPhone()).matches())
+			throw new InvalidPhoneNumberException();
 		if (userDaoImp.findUserByPhoneNumber(user.getPhone()).isPresent())
 			throw new DuplicatePhoneNumberException();
 		if (userDaoImp.findUserByEmail(user.getEmail()).isPresent())
 			throw new DuplicateEmailException();
-		user.setPassword(user.getPassword().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
+		
+		user.setPassword(user.getEmail().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
 		user = userDaoImp.saveUser(user);
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.CREATED.value());
@@ -227,7 +232,7 @@ public class UserServiceImp implements UserService {
 			throw new IdNotFoundException();
 		User user = optional.get();
 //		if (user.getUserStatus() == UserStatus.valueOf("ACTIVE"))
-			user.setUserStatus(UserStatus.valueOf("IN_ACTIVE"));
+		user.setUserStatus(UserStatus.valueOf("IN_ACTIVE"));
 //		else
 //			user.setUserStatus(UserStatus.valueOf("ACTIVE"));
 		user = userDaoImp.updateUser(user);

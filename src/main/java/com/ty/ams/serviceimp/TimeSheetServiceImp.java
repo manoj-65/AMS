@@ -8,12 +8,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import com.ty.ams.dao.TimeSheetDao;
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.TimeSheet;
@@ -81,8 +79,8 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		} else {
 			responseStructure.setBody(timeSheet);
 			responseStructure.setMessage("time sheet was not created ");
-			responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-			return new ResponseEntity<>(responseStructure, HttpStatus.BAD_REQUEST);
+			responseStructure.setStatusCode(HttpStatus.CONFLICT.value());
+			return new ResponseEntity<>(responseStructure, HttpStatus.CONFLICT);
 		}
 
 	}
@@ -101,8 +99,8 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		} else {
 			responseStructure.setMessage("time sheet not found");
 			responseStructure.setBody(null);
-			responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
-			return new ResponseEntity<ResponseStructure<TimeSheet>>(responseStructure, HttpStatus.NOT_FOUND);
+			responseStructure.setStatusCode(HttpStatus.CONFLICT.value());
+			return new ResponseEntity<ResponseStructure<TimeSheet>>(responseStructure, HttpStatus.CONFLICT);
 		}
 	}
 
@@ -284,10 +282,18 @@ public class TimeSheetServiceImp implements TimeSheetService {
 					.filter(timeSheet -> timeSheet.getStart_date().getMonth().getValue() == Month
 							.valueOf(month.toUpperCase()).getValue() && timeSheet.getStart_date().getYear() == year)
 					.collect(Collectors.toList());
-			responseStructure.setBody(timeSheets);
-			responseStructure.setMessage(" FETCHED SUCCESSFULLY");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<TimeSheet>>>(responseStructure, HttpStatus.OK);
+			if (!timeSheets.isEmpty()) {
+				responseStructure.setBody(timeSheets);
+				responseStructure.setMessage(" FETCHED SUCCESSFULLY");
+				responseStructure.setStatusCode(HttpStatus.OK.value());
+				return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+			} else {
+				responseStructure.setBody(new ArrayList<>());
+				responseStructure.setMessage(
+						"time sheet with respect to month :" + month + " and year:" + year + "\n not presented");
+				responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+				return new ResponseEntity<>(responseStructure, HttpStatus.NOT_FOUND);
+			}
 		} catch (Exception e) {
 			responseStructure.setBody(new ArrayList<>());
 			responseStructure.setMessage("FAILED TO FETCH");
@@ -345,4 +351,10 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		}
 	}
 
+	@Override
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheet() {
+		LocalDate currentDate = LocalDate.now();
+		return findTimeSheetByMonthNameOfAllEmployees(String.valueOf(currentDate.getMonth()), currentDate.getYear());
+
+	}
 }

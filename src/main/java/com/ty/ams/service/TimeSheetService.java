@@ -1,9 +1,7 @@
 package com.ty.ams.service;
 
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
-
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.responsestructure.ResponseStructure;
 
@@ -39,4 +37,6 @@ public interface TimeSheetService {
 
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOnCustomDates(String startMonth,
 			int start_year, String endMonth, int end_year);
+
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheet();
 }
