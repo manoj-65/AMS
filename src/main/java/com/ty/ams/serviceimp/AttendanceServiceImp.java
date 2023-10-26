@@ -121,7 +121,7 @@ public class AttendanceServiceImp implements AttendanceService {
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
 			response.setBody(dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date));
-			return new ResponseEntity<ResponseStructure<List<Attendance>>>(HttpStatus.OK);
+			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
 		}
 		throw new AttendanceNotFoundWithTheEnterdDate();
 	}
