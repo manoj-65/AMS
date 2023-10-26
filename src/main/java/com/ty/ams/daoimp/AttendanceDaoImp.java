@@ -41,9 +41,10 @@ public class AttendanceDaoImp implements AttendanceDao {
 	}
 
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendanceStatus status) {
+	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendanceStatus attendanceStatus) {
 		
-		return attendanceRepository.findByAttendanceStatus(status) ;
+		
+		return attendanceRepository.findByAttendanceStatus(attendanceStatus) ;
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public class AttendanceDaoImp implements AttendanceDao {
 	}
 
 	@Override
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
+	public  List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) {
 		
 		return attendanceRepository.findByAttendanceStatusAndDate(status, date);
 	}
