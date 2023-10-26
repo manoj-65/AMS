@@ -1,4 +1,4 @@
-package com.ty.ams.responsestructure;
+ package com.ty.ams.responsestructure;
 
 import lombok.Getter;
 import lombok.Setter;
