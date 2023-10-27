@@ -16,6 +16,7 @@ import com.ty.ams.entity.Attendance;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.exceptionclasses.attendance.AttendanceNotFoundException;
 import com.ty.ams.exceptionclasses.attendance.UnableToCreateAttendance;
+import com.ty.ams.exceptionclasses.timesheet.TimeSheetDoesNotExist;
 import com.ty.ams.exceptionclasses.user.AttendanceNotFoundWithTheEnterdDate;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.AttendanceService;
@@ -132,6 +133,22 @@ public class AttendanceServiceImp implements AttendanceService {
 			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
 		}
 		throw new AttendanceNotFoundWithTheEnterdDate();
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(int attendanceId) {
+		
+		TimeSheet timesheet = timeSheetDao.findBytimesheet_id(attendanceId).get() ;
+		if (timesheet != null ) {
+			
+			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>() ;
+			response.setStatusCode(HttpStatus.OK.value());
+			response.setMessage(HttpStatus.OK.getReasonPhrase());
+			response.setBody(timesheet.getAttendences());
+			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
+		}
+		
+		throw new TimeSheetDoesNotExist() ;
 	}
 
 }
