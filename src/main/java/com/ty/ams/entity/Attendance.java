@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import com.ty.ams.util.Attendence_status;
+import com.ty.ams.util.AttendanceStatus;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,12 +28,12 @@ public class Attendance {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int attendanceId;
 	private LocalDate date;
-	private LocalTime login_time;
-	private LocalTime logout_time;
-	private Attendence_status attendence_e;
+	private LocalTime loginTime;
+	private LocalTime logoutTime;
+	@Enumerated(EnumType.STRING)
+	private AttendanceStatus attendanceStatus;
 	private double totalWorkingHours;
-
 	@ManyToMany
-	private List<Batch>  batch;
+	private List<Batch> batchs;
 
 }
