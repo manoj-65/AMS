@@ -44,7 +44,7 @@ public class TimeSheetDaoImp implements TimeSheetDao {
 	}
 
 	@Override
-	public List<TimeSheet> findAllTimeSheet(int userId) {
+	public List<TimeSheet> findAllTimeSheetByUserId(int userId) {
 		return userDao.findUserById(userId).get().getTimeSheets();
 	}
 
