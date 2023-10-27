@@ -2,7 +2,9 @@ package com.ty.ams.serviceimp;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -87,11 +89,15 @@ public class BatchServiceImp implements BatchService {
 //			Batch batch = optional.get();
 //			User u = batch.getUser();
 //			if (u != null) {
-//				List<Batch> batchs = u.getBatchs();
-//				for (Batch b : batchs) {
+//				List<Batch>  batchs= u.getBatchs();
+//				Iterator<Batch> i=batchs.iterator();
+//				while(i.hasNext()) {
+//					Batch b=i.next();
 //					if (b.getBatchCode() == batch.getBatchCode())
-//						batchs.remove(batch);
+//						i.remove();
 //				}
+//batchs.removeIf(b -> b.getBatchCode() == batch.getBatchCode());
+
 //				u.setBatchs(batchs);
 //				userDaoImp.updateUser(u);
 //			}
@@ -105,7 +111,7 @@ public class BatchServiceImp implements BatchService {
 //		} else {
 //			return null;
 //		}
-//}
+//	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findAllBatchs() {
