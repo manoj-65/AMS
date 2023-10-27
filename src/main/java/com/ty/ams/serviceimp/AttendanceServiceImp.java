@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.ty.ams.daoimp.AttendanceDaoImp;
+import com.ty.ams.daoimp.TimeSheetDaoImp;
 import com.ty.ams.entity.Attendance;
+import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.exceptionclasses.user.AttendanceNotFoundException;
 import com.ty.ams.exceptionclasses.user.AttendanceNotFoundWithTheEnterdDate;
 import com.ty.ams.exceptionclasses.user.UnableToCreateAttendance;
@@ -24,16 +26,22 @@ public class AttendanceServiceImp implements AttendanceService {
 
 	@Autowired
 	private AttendanceDaoImp dao;
+	
+	@Autowired
+	private TimeSheetDaoImp timeSheetDao ;
 
 	@Override
-	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance) {
-
-		if (attendance != null) {
+	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance, int timesheetId) {
+		
+		TimeSheet timeSheet = timeSheetDao.findBytimesheet_id(timesheetId).get() ;
+		
+		if (attendance != null && timeSheet != null) {
 
 			ResponseStructure<Attendance> response = new ResponseStructure<Attendance>();
 			response.setStatusCode(HttpStatus.CREATED.value());
 			response.setMessage(HttpStatus.CREATED.getReasonPhrase());
 			response.setBody(attendance);
+			timeSheet.getAttendences().add(attendance) ;
 			dao.saveAttendance(attendance);
 			return new ResponseEntity<ResponseStructure<Attendance>>(response, HttpStatus.CREATED);
 		}

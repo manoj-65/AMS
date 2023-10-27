@@ -128,7 +128,7 @@ public class UserExceptionHandler {
 		
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.CONFLICT.value());
-		structure.setMessage("Unable to create the Attendance");
+		structure.setMessage("Unable to create the Attendance Check The Details And TimeSheet ID");
 		structure.setBody(unableToCreateAttendance.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.CONFLICT);
 		
