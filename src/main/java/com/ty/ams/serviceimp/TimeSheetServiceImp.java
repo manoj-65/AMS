@@ -88,7 +88,6 @@ public class TimeSheetServiceImp implements TimeSheetService {
 	@Override
 	public ResponseEntity<ResponseStructure<TimeSheet>> updateTimeSheet(TimeSheet timeSheet) {
 		ResponseStructure<TimeSheet> responseStructure = new ResponseStructure<>();
-		System.err.println(timeSheet.getTimesheetId());
 		Optional<TimeSheet> optional = timeSheetDao.findBytimesheet_id(timeSheet.getTimesheetId());
 		if (optional.isPresent()) {
 			timeSheetDao.updateTimeSheet(optional.get());
@@ -162,7 +161,7 @@ public class TimeSheetServiceImp implements TimeSheetService {
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetOfUser(int userId) {
 		ResponseStructure<List<TimeSheet>> responseStructure = new ResponseStructure<>();
 		try {
-			List<TimeSheet> timeSheets = timeSheetDao.findAllTimeSheet(userId);
+			List<TimeSheet> timeSheets = timeSheetDao.findAllTimeSheetByUserId(userId);
 			responseStructure.setBody(timeSheets);
 			responseStructure.setMessage(" FETCHED SUCCESSFULLY");
 			responseStructure.setStatusCode(HttpStatus.OK.value());
@@ -179,7 +178,7 @@ public class TimeSheetServiceImp implements TimeSheetService {
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetOfAYearOfUser(int year, int userId) {
 		ResponseStructure<List<TimeSheet>> responseStructure = new ResponseStructure<>();
 		try {
-			List<TimeSheet> listOfTimeSheets = timeSheetDao.findAllTimeSheet(userId);
+			List<TimeSheet> listOfTimeSheets = timeSheetDao.findAllTimeSheetByUserId(userId);
 			List<TimeSheet> timesheetOfYear = null;
 			if (listOfTimeSheets != null) {
 				timesheetOfYear = listOfTimeSheets.stream()
