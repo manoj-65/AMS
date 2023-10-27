@@ -1,4 +1,4 @@
-package com.ty.ams.exceptionclasses.user;
+package com.ty.ams.exceptionclasses.attendance;
 
 public class AttendanceNotFoundException extends RuntimeException{
 	
