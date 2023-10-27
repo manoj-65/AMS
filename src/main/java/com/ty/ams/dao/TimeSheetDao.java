@@ -10,8 +10,6 @@ public interface TimeSheetDao {
 
 	TimeSheet updateTimeSheet(TimeSheet timeSheet);
 
-	Optional<TimeSheet> findTimeSheetById(int id);
-
 	void deleteTimeSheetById(int id);
 
 	List<TimeSheet> findAllTimeSheets();

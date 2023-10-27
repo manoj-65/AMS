@@ -28,10 +28,7 @@ public class TimeSheetDaoImp implements TimeSheetDao {
 		return timeSheetRepository.save(timeSheet);
 	}
 
-	@Override
-	public Optional<TimeSheet> findTimeSheetById(int id) {
-		return timeSheetRepository.findById(id);
-	}
+
 
 	@Override
 	public void deleteTimeSheetById(int id) {
