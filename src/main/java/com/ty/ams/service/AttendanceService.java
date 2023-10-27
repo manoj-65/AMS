@@ -11,7 +11,7 @@ import com.ty.ams.util.AttendanceStatus;
 
 public interface AttendanceService {
 	
-	ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance) ;
+	ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance, int timesheetId) ;
 	
 	ResponseEntity<ResponseStructure<Attendance>> findAttandanceById(int id) ;
 	
@@ -27,5 +27,5 @@ public interface AttendanceService {
 
 	ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatus(String status);
 
-	
+	ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(int attendanceId) ;
 }

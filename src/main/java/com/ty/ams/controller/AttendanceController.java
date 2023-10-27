@@ -32,9 +32,9 @@ public class AttendanceController {
 	@Operation(description = "Attendance Object Will be Saved...", summary = "To Save Attendance object to the Database...")
 	@ApiResponses(value = { @ApiResponse(description = "Attendance Saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save Attendance To Database", responseCode = "409") })
-	@PostMapping
-	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(@RequestBody Attendance attendance) {
-		return service.saveAttendance(attendance);
+	@PostMapping("/{timesheetId}")
+	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(@RequestBody Attendance attendance, @PathVariable int timesheetId) {
+		return service.saveAttendance(attendance, timesheetId);
 	}
 	
 	@Operation(description = "To find the attendance based on the Id", summary = "To find the Attendance Object from the data base")
@@ -62,23 +62,36 @@ public class AttendanceController {
 	}
 	
 	@Operation(description = "To find the attendance based on the status", summary = "To find the attendance based on the status and to return in the form of list")
-	@ApiResponses(value = {@ApiResponse(description = "Attendance Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable Find deleted", responseCode = "204")})
+	@ApiResponses(value = {@ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable Find Attendance", responseCode = "204")})
 	@GetMapping("/status/{attendanceStatus}")
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByStatus(@PathVariable String attendanceStatus){
 		return service.findAllAttendanceByAttendanceStatus(attendanceStatus) ;
 	}
 	
 	@Operation(description = "To find the attendance based on the Date", summary = "To find the attendance based on the Date and to return in the form of list")
-	@ApiResponses(value = {@ApiResponse(description = "Attendance Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable Find deleted", responseCode = "204")})
+	@ApiResponses(value = {@ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable Find Attendance", responseCode = "204")})
 	@GetMapping("/date/{date}")
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByDate(@PathVariable LocalDate date){
 		return service.findAllAttendenceByDate(date) ;
 	}
 	
+	@Operation(description = "To find the attendance based on the status and Date", summary = "To find the attendance based on the Status and Date and to return in the form of list")
+	@ApiResponses(value = {@ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable Find Attendance", responseCode = "204")})
 	@GetMapping("/status/{attendanceStatus}/{date}")
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByStatusAndDate(@PathVariable String attendanceStatus, @PathVariable LocalDate date){
 		return service.findAllAttendanceByAttendanceStatusAndDate(attendanceStatus, date) ;
 	}
+	
+
+	@Operation(description = "To find the attendance based on the Time Sheet ID", summary = "To find the attendance based on the TimeSheet ID and to return in the form of list")
+	@ApiResponses(value = {@ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable Find Attendance", responseCode = "204")})
+	@GetMapping("/timesheet/{timesheetId}")
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(@PathVariable int timesheetId){
+		return service.findAttendanceByTimeSheetId(timesheetId) ;
+	}
+	
 }

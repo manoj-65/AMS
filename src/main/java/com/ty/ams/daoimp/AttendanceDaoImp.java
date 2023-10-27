@@ -59,4 +59,5 @@ public class AttendanceDaoImp implements AttendanceDao {
 		return attendanceRepository.findByAttendanceStatusAndDate(status, date);
 	}
 
+
 }
