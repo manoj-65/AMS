@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.ty.ams.daoimp.AttendanceDaoImp;
@@ -29,7 +28,6 @@ public class AttendanceServiceImp implements AttendanceService {
 	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance) {
 
 		if (attendance != null) {
-
 			ResponseStructure<Attendance> response = new ResponseStructure<Attendance>();
 			response.setStatusCode(HttpStatus.CREATED.value());
 			response.setMessage(HttpStatus.CREATED.getReasonPhrase());
@@ -48,7 +46,6 @@ public class AttendanceServiceImp implements AttendanceService {
 			response.setStatusCode(HttpStatus.FOUND.value());
 			response.setMessage(HttpStatus.FOUND.getReasonPhrase());
 			response.setBody(dao.findById(id).get());
-			System.out.println(dao.findById(id));
 			return new ResponseEntity<ResponseStructure<Attendance>>(response, HttpStatus.FOUND);
 		}
 		throw new AttendanceNotFoundException();
@@ -58,7 +55,6 @@ public class AttendanceServiceImp implements AttendanceService {
 	public ResponseEntity<ResponseStructure<Attendance>> updateAttandance(Attendance attendance) {
 
 		if (attendance != null) {
-
 			ResponseStructure<Attendance> response = new ResponseStructure<Attendance>();
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
@@ -87,7 +83,7 @@ public class AttendanceServiceImp implements AttendanceService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatus(String status) {
-		
+
 		if (dao.findAllAttendanceByAttendanceStatus(AttendanceStatus.valueOf(status.toUpperCase())) != null) {
 			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
 			response.setStatusCode(HttpStatus.OK.value());
@@ -113,14 +109,16 @@ public class AttendanceServiceImp implements AttendanceService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(
-			String status, LocalDate date) {
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(String status,
+			LocalDate date) {
 
-		if (dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()) , date) != null) {
-			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>() ;
+		if (dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()),
+				date) != null) {
+			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
-			response.setBody(dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date));
+			response.setBody(dao
+					.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date));
 			return new ResponseEntity<ResponseStructure<List<Attendance>>>(HttpStatus.OK);
 		}
 		throw new AttendanceNotFoundWithTheEnterdDate();
