@@ -1,4 +1,4 @@
-	package com.ty.ams;
+package com.ty.ams;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
