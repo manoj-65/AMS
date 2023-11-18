@@ -85,4 +85,13 @@ public class AttendanceController {
 		return service.findAllAttendanceByAttendanceStatusAndDate(attendanceStatus, date) ;
 	}
 	
+
+	@Operation(description = "To find the attendance based on the Time Sheet ID", summary = "To find the attendance based on the TimeSheet ID and to return in the form of list")
+	@ApiResponses(value = {@ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable Find Attendance", responseCode = "204")})
+	@GetMapping("/timesheet/{timesheetId}")
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(@PathVariable int timesheetId){
+		return service.findAttendanceByTimeSheetId(timesheetId) ;
+	}
+	
 }
