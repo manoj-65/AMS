@@ -10,13 +10,13 @@ public interface TimeSheetDao {
 
 	TimeSheet updateTimeSheet(TimeSheet timeSheet);
 
-	Optional<TimeSheet> findTimeSheetById(int id);
-
 	void deleteTimeSheetById(int id);
 
 	List<TimeSheet> findAllTimeSheets();
 
 	List<TimeSheet> findAllTimeSheetByUserId(int userId);
+
+	public Optional<TimeSheet> fetchCurrentMonthTimeSheetofUser(int userId);
 
 	public Optional<TimeSheet> findBytimesheet_id(int id);
 }
