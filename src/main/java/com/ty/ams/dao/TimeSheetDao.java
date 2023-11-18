@@ -16,5 +16,7 @@ public interface TimeSheetDao {
 
 	List<TimeSheet> findAllTimeSheetByUserId(int userId);
 
+	public Optional<TimeSheet> fetchCurrentMonthTimeSheetofUser(int userId);
+
 	public Optional<TimeSheet> findBytimesheet_id(int id);
 }

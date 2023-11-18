@@ -1,11 +1,10 @@
 package com.ty.ams.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.responsestructure.ResponseStructure;
-
-
 
 public interface TimeSheetService {
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveTimeSheet(TimeSheet timeSheet, int userId);
@@ -25,4 +24,9 @@ public interface TimeSheetService {
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetOfAll();
 
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(int userId);
+
+	// admin
+	
+
+	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(TimeSheet timeSheet, int userId);
 }

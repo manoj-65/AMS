@@ -1,4 +1,5 @@
 package com.ty.ams.serviceimp;
+
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -18,6 +19,7 @@ import com.ty.ams.exceptionclasses.timesheet.TimeSheetAlreadyExists;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.TimeSheetService;
 import com.ty.ams.util.UserRole;
+
 @Service
 public class TimeSheetServiceImp implements TimeSheetService {
 
@@ -50,10 +52,6 @@ public class TimeSheetServiceImp implements TimeSheetService {
 					timeSheetDao.saveTimeSheet(timeSheet);
 					user.get().getTimeSheets().add(timeSheet);
 					userDao.saveUser(user.get());
-					responseStructure.setBody(timeSheet);
-					responseStructure.setMessage("time sheet created successfully");
-					responseStructure.setStatusCode(HttpStatus.CREATED.value());
-					return new ResponseEntity<>(responseStructure, HttpStatus.CREATED);
 				} else {
 					timeSheet.setStart_date(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(),
 							admin.get().getTimeSheets().stream().findAny().get().getStart_date().getDayOfMonth()));
@@ -63,14 +61,14 @@ public class TimeSheetServiceImp implements TimeSheetService {
 					sheets.add(timeSheet);
 					user.get().setTimeSheets(sheets);
 					userDao.updateUser(user.get());
-					responseStructure.setBody(timeSheet);
-					responseStructure.setMessage("time sheet created successfully");
-					responseStructure.setStatusCode(HttpStatus.CREATED.value());
-					return new ResponseEntity<>(responseStructure, HttpStatus.CREATED);
 				}
+				responseStructure.setBody(timeSheet);
+				responseStructure.setMessage("time sheet created successfully");
+				responseStructure.setStatusCode(HttpStatus.CREATED.value());
+				return new ResponseEntity<>(responseStructure, HttpStatus.CREATED);
 			}
 			responseStructure.setBody(null);
-			responseStructure.setMessage("User Not Founf");
+			responseStructure.setMessage("User Not Found");
 			responseStructure.setStatusCode(HttpStatus.CONFLICT.value());
 			return new ResponseEntity<>(responseStructure, HttpStatus.CONFLICT);
 		} catch (Exception e) {
@@ -84,9 +82,7 @@ public class TimeSheetServiceImp implements TimeSheetService {
 	public LocalDate endDate(TimeSheet timeSheet, User admin) {
 		Optional<TimeSheet> adminTimeSheet = admin.getTimeSheets().stream().findAny();
 		int month = timeSheet.getStart_date().getMonthValue();
-		System.out.println(month + "month value");
 		int year = timeSheet.getStart_date().getYear();
-		System.out.println(year + "year value");
 		int endDate = adminTimeSheet.get().getEnd_date().getDayOfMonth();
 		DateTimeFormatter inputFormatter = null;
 		if (month <= 9 && month >= 1 && endDate <= 9 && endDate >= 1) {
@@ -104,7 +100,6 @@ public class TimeSheetServiceImp implements TimeSheetService {
 			inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		} else if (month == 10 || month == 11 && endDate <= 9 && endDate >= 1) {
 			month += 1;
-			System.out.println("four " + 3);
 			inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
 		} else if (month == 12 && endDate <= 9 && endDate >= 1) {
 			month = 1;
@@ -271,35 +266,27 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		}
 	}
 
-	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(LocalDate startDate, LocalDate endDate,
-			int userId) {
+	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(TimeSheet timesheet, int userId) {
 		Optional<User> user = userDao.findUserById(userId);
 		List<TimeSheet> sheets = user.get().getTimeSheets();
 		ResponseStructure<List<TimeSheet>> responseStructure = new ResponseStructure<>();
 		try {
 			if (sheets == null || sheets.isEmpty()) {
 				ArrayList<TimeSheet> new_sheets = new ArrayList<TimeSheet>();
-				TimeSheet timesheet = new TimeSheet();
-				timesheet.setStart_date(startDate);
-				timesheet.setEnd_date(endDate);
 				timeSheetDao.saveTimeSheet(timesheet);
 				new_sheets.add(timesheet);
 				user.get().setTimeSheets(new_sheets);
 				userDao.updateUser(user.get());
-				responseStructure.setBody(null);
-				responseStructure.setMessage("time sheet created successfully");
-				responseStructure.setStatusCode(HttpStatus.CREATED.value());
-				return new ResponseEntity<>(HttpStatus.CREATED);
 			} else {
 				TimeSheet sheet = sheets.stream().findAny().get();
-				sheet.setStart_date(startDate);
-				sheet.setEnd_date(endDate);
+				sheet.setStart_date(timesheet.getStart_date());
+				sheet.setEnd_date(timesheet.getEnd_date());
 				timeSheetDao.updateTimeSheet(sheet);
-				responseStructure.setBody(null);
-				responseStructure.setMessage("time sheet created successfully");
-				responseStructure.setStatusCode(HttpStatus.CREATED.value());
-				return new ResponseEntity<>(HttpStatus.CREATED);
 			}
+			responseStructure.setBody(null);
+			responseStructure.setMessage("time sheet created successfully");
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		} catch (Exception e) {
 			responseStructure.setBody(null);
 			responseStructure.setMessage("time sheet was not created ");

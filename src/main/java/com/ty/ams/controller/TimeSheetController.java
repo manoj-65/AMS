@@ -1,5 +1,6 @@
 package com.ty.ams.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,17 @@ public class TimeSheetController {
 	@PostMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveTimeSheet(TimeSheet timeSheet, @PathVariable int userId) {
 		return timeSheetService.saveTimeSheet(timeSheet, userId);
+	}
+
+	@Operation(description = "admin timesheet Object Will be Saved...", summary = "To Save admin timesheet Object to Database...")
+	@ApiResponses(value = { @ApiResponse(description = " admin timesheet Saved Successfully", responseCode = "201"),
+			@ApiResponse(description = "Unable To Save admin timesheet To Database", responseCode = "409") })
+	@PostMapping("/admin/{userId}")
+	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(@RequestBody TimeSheet timeSheet,
+			@PathVariable int userId) {
+
+		return timeSheetService.saveAdminTimeSheet(timeSheet, userId);
+
 	}
 
 	@Operation(description = "timesheet Object Will be Updated...", summary = "To Update timesheet Object...")
