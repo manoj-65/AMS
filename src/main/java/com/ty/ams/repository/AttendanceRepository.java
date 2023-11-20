@@ -18,6 +18,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
 	List<Attendance> findByDate(LocalDate date);
 
 	@Query("select a from Attendance a where a.attendanceStatus = ?1 and a.date = ?2")
-	List<Attendance> findByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date) ;
+	List<Attendance> findByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date);
 
 }
