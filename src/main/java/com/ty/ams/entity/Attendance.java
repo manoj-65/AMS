@@ -35,5 +35,4 @@ public class Attendance {
 	private double totalWorkingHours;
 	@ManyToMany
 	private List<Batch> batchs;
-
 }

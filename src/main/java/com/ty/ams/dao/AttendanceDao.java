@@ -22,5 +22,5 @@ public interface AttendanceDao {
 	public List<Attendance> findAllAttendenceByDate(LocalDate date);
 
 	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date);
-	
+
 }
