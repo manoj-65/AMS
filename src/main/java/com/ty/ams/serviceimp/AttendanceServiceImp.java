@@ -41,7 +41,6 @@ public class AttendanceServiceImp implements AttendanceService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance, int userId) {
-		System.out.println("its here ..........");
 		Optional<TimeSheet> timeSheet = timeSheetDao.fetchCurrentMonthTimeSheetofUser(userId);
 		if (timeSheet.isEmpty()) {
 			timeSheetService.saveTimeSheet(new TimeSheet(), userId);
@@ -131,16 +130,17 @@ public class AttendanceServiceImp implements AttendanceService {
 	@Override
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(String status,
 			LocalDate date) {
-		if (dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()),
-				date) != null) {
+		List<Attendance> attendances = dao
+				.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date);
+		if (attendances != null && !attendances.isEmpty()) {
 			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
-			response.setBody(dao
-					.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date));
-			return new ResponseEntity<ResponseStructure<List<Attendance>>>(HttpStatus.OK);
+			response.setBody(attendances);
+			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
 		}
 		throw new AttendanceNotFoundWithTheEnterdDate();
+
 	}
 
 	@Override
@@ -155,8 +155,6 @@ public class AttendanceServiceImp implements AttendanceService {
 			response.setBody(timesheet.getAttendences());
 			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
 		}
-
 		throw new TimeSheetDoesNotExist();
 	}
-
 }

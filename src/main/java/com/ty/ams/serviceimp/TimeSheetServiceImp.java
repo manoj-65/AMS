@@ -38,10 +38,10 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		try {
 			if (user.get() != null) {
 				List<TimeSheet> listOfTimeSheets = user.get().getTimeSheets();
-				if (listOfTimeSheets != null) {
-					Optional<TimeSheet> timesheet = listOfTimeSheets.stream().filter(
-							sheet -> (sheet.getStart_date().getMonthValue() == timeSheet.getStart_date().getMonthValue()
-									&& sheet.getStart_date().getYear() == timeSheet.getStart_date().getYear()))
+				if (listOfTimeSheets != null && !listOfTimeSheets.isEmpty()) {
+					Optional<TimeSheet> timesheet = listOfTimeSheets.stream()
+							.filter(sheet -> (sheet.getStart_date().getMonthValue() == LocalDate.now().getMonthValue()
+									&& sheet.getStart_date().getYear() == LocalDate.now().getYear()))
 							.findAny();
 					if (timesheet.isPresent()) {
 						throw new TimeSheetAlreadyExists();
@@ -72,6 +72,7 @@ public class TimeSheetServiceImp implements TimeSheetService {
 			responseStructure.setStatusCode(HttpStatus.CONFLICT.value());
 			return new ResponseEntity<>(responseStructure, HttpStatus.CONFLICT);
 		} catch (Exception e) {
+			e.printStackTrace();
 			responseStructure.setBody(timeSheet);
 			responseStructure.setMessage("time sheet was not created ");
 			responseStructure.setStatusCode(HttpStatus.CONFLICT.value());
@@ -174,17 +175,20 @@ public class TimeSheetServiceImp implements TimeSheetService {
 		ResponseStructure<List<TimeSheet>> responseStructure = new ResponseStructure<>();
 		try {
 			User user = userDao.findUserById(userId).get();
-			List<TimeSheet> timeSheets = user.getTimeSheets().stream().filter(
-					timesheet -> timesheet.getStart_date().getMonth().getValue() == Month.valueOf(startMonth).getValue()
-							&& timesheet.getStart_date().getYear() == start_year
-							&& timesheet.getEnd_date().getMonth().getValue() == Month.valueOf(endMonth).getValue()
-							&& timesheet.getEnd_date().getYear() == end_year)
+			List<TimeSheet> timeSheets = user.getTimeSheets().stream()
+					.filter(timesheet -> timesheet.getStart_date().getMonth().getValue() >= Month
+							.valueOf(startMonth.toUpperCase()).getValue()
+							&& timesheet.getStart_date().getMonth().getValue() <= Month.valueOf(endMonth.toUpperCase())
+									.getValue()
+							&& timesheet.getStart_date().getYear() >= start_year
+							&& timesheet.getStart_date().getYear() <= end_year)
 					.collect(Collectors.toList());
 			responseStructure.setBody(timeSheets);
 			responseStructure.setMessage(" FETCHED SUCCESSFULLY");
 			responseStructure.setStatusCode(HttpStatus.OK.value());
 			return new ResponseEntity<ResponseStructure<List<TimeSheet>>>(responseStructure, HttpStatus.OK);
 		} catch (Exception e) {
+			e.printStackTrace();
 			responseStructure.setBody(new ArrayList<>());
 			responseStructure.setMessage("FAILED TO FETCH");
 			responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -198,13 +202,14 @@ public class TimeSheetServiceImp implements TimeSheetService {
 			int start_year, String endMonth, int end_year) {
 		ResponseStructure<List<TimeSheet>> responseStructure = new ResponseStructure<>();
 		try {
-			List<TimeSheet> timeSheets = timeSheetDao.findAllTimeSheets().stream().filter(
-					timesheet -> timesheet.getStart_date().getMonth().getValue() == Month.valueOf(startMonth).getValue()
-							&& timesheet.getStart_date().getYear() == start_year
-							&& timesheet.getEnd_date().getMonth().getValue() == Month.valueOf(endMonth).getValue()
-							&& timesheet.getEnd_date().getYear() == end_year)
+			List<TimeSheet> timeSheets = timeSheetDao.findAllTimeSheets().stream()
+					.filter(timesheet -> timesheet.getStart_date().getMonth().getValue() >= Month
+							.valueOf(startMonth.toUpperCase()).getValue()
+							&& timesheet.getStart_date().getMonth().getValue() <= Month.valueOf(endMonth.toUpperCase())
+									.getValue()
+							&& timesheet.getStart_date().getYear() >= start_year
+							&& timesheet.getStart_date().getYear() <= end_year)
 					.collect(Collectors.toList());
-
 			responseStructure.setBody(timeSheets);
 			responseStructure.setMessage(" FETCHED SUCCESSFULLY");
 			responseStructure.setStatusCode(HttpStatus.OK.value());
