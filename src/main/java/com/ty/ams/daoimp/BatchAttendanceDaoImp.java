@@ -16,28 +16,21 @@ public class BatchAttendanceDaoImp implements BatchAttendanceDao{
 		
 		return attendanceRepository.save(batchAttendance);
 	}
-
-	@Override
-	public BatchAttendance updateBatchAttendance(BatchAttendance batchAttendance) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void deleteBatchAttendance(BatchAttendance batchAttendance) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 	public int findBatchAttendanceCountByBatchId(int batch_id) {
 		return attendanceRepository.findBatchAttendanceCountByBatchId(batch_id);
 	}
 	
+	
+	
+	
+	
 
-//	@Override
-//	public Optional<BatchAttendance> findBatchAttendanceById(int id) {
-//		// TODO Auto-generated method stub
-//		return Optional.empty();
-//	}
+	
+	
+	
+
+
 
 
 }
