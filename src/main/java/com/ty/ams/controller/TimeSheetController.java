@@ -43,7 +43,6 @@ public class TimeSheetController {
 	@PostMapping("/admin/{userId}")
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(@RequestBody TimeSheet timeSheet,
 			@PathVariable int userId) {
-
 		return timeSheetService.saveAdminTimeSheet(timeSheet, userId);
 
 	}
@@ -74,14 +73,17 @@ public class TimeSheetController {
 
 	@Operation(description = "Retrieve time sheets of all users within a custom date range", summary = "Get time sheets for a specified date range")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
+			@ApiResponse(description = "Unable To Find timesheets...", responseCode = "404") })
 	@GetMapping("{startMonth}/{start_year}/{endMonth}/{end_year}")
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOfAllOnCustomDates(
 			@PathVariable String startMonth, @PathVariable int start_year, @PathVariable String endMonth,
 			@PathVariable int end_year) {
-		return timeSheetService.findTimeSheetOfUserOnCustomDates(startMonth, start_year, endMonth, end_year, end_year);
+		return timeSheetService.findTimeSheetOfAllOnCustomDates(startMonth, start_year, endMonth, end_year);
 	}
 
+	@Operation(description = "Retrieve time sheets of user within a custom date range", summary = "Get time sheets for a specified date range")
+	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
 	@GetMapping("{startMonth}/{start_year}/{endMonth}/{end_year}/{userId}")
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOfUserOnCustomDates(
 			@PathVariable String startMonth, @PathVariable int start_year, @PathVariable String endMonth,
@@ -89,7 +91,7 @@ public class TimeSheetController {
 		return timeSheetService.findTimeSheetOfUserOnCustomDates(startMonth, start_year, endMonth, end_year, userId);
 	}
 
-	@Operation(description = "Retrieve time sheets for the current month of all users", summary = " Get time sheets for the currently ongoing month")
+	@Operation(description = "Retrieve time sheets for the current month of all users", summary = " Get time sheets for the current ongoing month")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
 	@GetMapping("currentAll")
@@ -97,8 +99,12 @@ public class TimeSheetController {
 		return timeSheetService.fetchCurrentMonthTimeSheetOfAll();
 	}
 
-	@GetMapping("currentUser")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(int userId) {
+	@Operation(description = "Retrieve time sheets for the current month of user", summary = " Get time sheets for the current ongoing month")
+	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
+			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
+	@GetMapping("currentUser/{userId}")
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(
+			@PathVariable int userId) {
 		return timeSheetService.fetchCurrentMonthTimeSheetofUser(userId);
 	}
 }

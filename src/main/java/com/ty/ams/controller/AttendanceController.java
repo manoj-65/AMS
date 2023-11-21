@@ -73,7 +73,7 @@ public class AttendanceController {
 		return service.findAllAttendanceByAttendanceStatus(attendanceStatus);
 	}
 
-	@Operation(description = "To find the attendance based on the Date", summary = "To find the attendance based on the Date and to return in the form of list")
+	@Operation(description = "To find the attendance based on the Date of all users", summary = "To find the attendance based on the Date and to return in the form of list")
 	@ApiResponses(value = { @ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable Find Attendance", responseCode = "204") })
 	@GetMapping("/date/{date}")
