@@ -1,5 +1,6 @@
 package com.ty.ams.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,18 @@ public class TimeSheetController {
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save timesheet To Database", responseCode = "409") })
 	@PostMapping("/{userId}")
-	public ResponseEntity<ResponseStructure<TimeSheet>> saveTimeSheet(@RequestBody TimeSheet timeSheet,
-			@PathVariable int userId) {
+	public ResponseEntity<ResponseStructure<TimeSheet>> saveTimeSheet(TimeSheet timeSheet, @PathVariable int userId) {
 		return timeSheetService.saveTimeSheet(timeSheet, userId);
+	}
+
+	@Operation(description = "admin timesheet Object Will be Saved...", summary = "To Save admin timesheet Object to Database...")
+	@ApiResponses(value = { @ApiResponse(description = " admin timesheet Saved Successfully", responseCode = "201"),
+			@ApiResponse(description = "Unable To Save admin timesheet To Database", responseCode = "409") })
+	@PostMapping("/admin/{userId}")
+	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(@RequestBody TimeSheet timeSheet,
+			@PathVariable int userId) {
+		return timeSheetService.saveAdminTimeSheet(timeSheet, userId);
+
 	}
 
 	@Operation(description = "timesheet Object Will be Updated...", summary = "To Update timesheet Object...")
@@ -43,8 +53,7 @@ public class TimeSheetController {
 	}
 
 	@Operation(description = "timesheet Object Will be deleted...", summary = "To delete timesheet Object...")
-	@ApiResponses(value = {
-			@ApiResponse(description = "timesheet delete Successfully", responseCode = "204 "),
+	@ApiResponses(value = { @ApiResponse(description = "timesheet delete Successfully", responseCode = "204 "),
 			@ApiResponse(description = "Unable To Updated timesheet To Database", responseCode = "404") })
 	@DeleteMapping("/{id}/{userId}")
 	public ResponseEntity<ResponseStructure<String>> deleteTimeSheet(@PathVariable int id, @PathVariable int userId) {
@@ -59,84 +68,40 @@ public class TimeSheetController {
 		return timeSheetService.findTimeSheetById(id);
 	}
 
-	@Operation(description = "Fetch all time sheets in data base", summary = "fetching all time timesheets from database")
+	@Operation(description = "Retrieve time sheets of all users within a custom date range", summary = "Get time sheets for a specified date range")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheets", responseCode = "404") })
-	@GetMapping
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheets() {
-		return timeSheetService.findAllTimeSheetsOfAllUsers();
+			@ApiResponse(description = "Unable To Find timesheets...", responseCode = "404") })
+	@GetMapping("{startMonth}/{start_year}/{endMonth}/{end_year}")
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOfAllOnCustomDates(
+			@PathVariable String startMonth, @PathVariable int start_year, @PathVariable String endMonth,
+			@PathVariable int end_year) {
+		return timeSheetService.findTimeSheetOfAllOnCustomDates(startMonth, start_year, endMonth, end_year);
 	}
 
-	@Operation(description = "Fetching / Find all  timesheet by userId", summary = "fetch all timesheets of one user by using userId")
-	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided userId...", responseCode = "404") })
-	@GetMapping("byUserId/{userId}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetOfUser(@PathVariable int userId) {
-		return timeSheetService.findAllTimeSheetOfUser(userId);
-	}
-
-	@Operation(description = "Fetching / Find all  timesheets of user by year", summary = "fetch all timesheets of one user of a particular year")
-	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("{year}/{userId}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetOfAYearOfUser(@PathVariable int year,
-			@PathVariable int userId) {
-		return timeSheetService.findAllTimeSheetOfAYearOfUser(year, userId);
-	}
-
-	@Operation(description = "Fetching / Find timesheet of user by month and year", summary = "fetch  timesheet of one user of a particular month in a year")
-	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("{month}/{year}/{userId}")
-	ResponseEntity<ResponseStructure<TimeSheet>> findTimeSheetByMonthNameOfUser(@PathVariable String month,
-			@PathVariable int year, @PathVariable int userId) {
-		return timeSheetService.findTimeSheetByMonthNameOfUser(month, year, userId);
-	}
-
-	// from here
-
-	@Operation(description = "Fetching / Find all  timesheets of user in between two years", summary = "it will return list of timesheets between two years of a user ")
-	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("byYear/{startYear}/{endYear}/{userId}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetBetweenYearsOfUser(
-			@PathVariable int startYear, @PathVariable int endYear, @PathVariable int userId) {
-		return timeSheetService.findAllTimeSheetBetweenYearsOfUser(startYear, endYear, userId);
-	}
-
-	@Operation(description = "Fetching / Find all  timesheets of user in between two months", summary = "it will return list of timesheets between two user specified months of a user ")
-	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("byMonth/{startMonth}/{endMonth}/{year}/{userId}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findAllTimeSheetBetweenMonthsOfUser(
-			@PathVariable String startMonth, @PathVariable String endMonth, @PathVariable int year,
-			@PathVariable int userId) {
-		return timeSheetService.findAllTimeSheetBetweenMonthsOfUser(startMonth, endMonth, year, userId);
-	}
-
-	@Operation(description = "Fetching / Find all  timesheets of user in between two years", summary = "Retrieve time sheets of a specific user for a custom date range.")
+	@Operation(description = "Retrieve time sheets of user within a custom date range", summary = "Get time sheets for a specified date range")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
 	@GetMapping("{startMonth}/{start_year}/{endMonth}/{end_year}/{userId}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOfUserOnCustomDates(String startMonth,
-			int start_year, String endMonth, int end_year, int user_id) {
-		return timeSheetService.findTimeSheetOfUserOnCustomDates(startMonth, start_year, endMonth, end_year, user_id);
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOfUserOnCustomDates(
+			@PathVariable String startMonth, @PathVariable int start_year, @PathVariable String endMonth,
+			@PathVariable int end_year, @PathVariable int userId) {
+		return timeSheetService.findTimeSheetOfUserOnCustomDates(startMonth, start_year, endMonth, end_year, userId);
 	}
 
-	@Operation(description = "Retrieve time sheets within a custom date range", summary = "Get time sheets for a specified date range")
+	@Operation(description = "Retrieve time sheets for the current month of all users", summary = " Get time sheets for the current ongoing month")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("{startMonth}/{start_year}/{endMonth}/{end_year}")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> findTimeSheetOnCustomDates(String startMonth,
-			int start_year, String endMonth, int end_year) {
-		return timeSheetService.findTimeSheetOfUserOnCustomDates(startMonth, start_year, endMonth, end_year, end_year);
+	@GetMapping("currentAll")
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetOfAllUsers() {
+		return timeSheetService.fetchCurrentMonthTimeSheetOfAll();
 	}
 
-	@Operation(description = "Retrieve time sheets for the current month", summary = " Get time sheets for the currently ongoing month")
+	@Operation(description = "Retrieve time sheets for the current month of user", summary = " Get time sheets for the current ongoing month")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find timesheet for Provided user...", responseCode = "404") })
-	@GetMapping("current")
-	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheet() {
-		return timeSheetService.fetchCurrentMonthTimeSheet();
+	@GetMapping("currentUser/{userId}")
+	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(
+			@PathVariable int userId) {
+		return timeSheetService.fetchCurrentMonthTimeSheetofUser(userId);
 	}
 }

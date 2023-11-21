@@ -27,5 +27,5 @@ public interface AttendanceService {
 
 	ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatus(String status);
 
-	
+	ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(int attendanceId) ;
 }
