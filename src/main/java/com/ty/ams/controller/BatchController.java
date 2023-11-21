@@ -61,7 +61,7 @@ public class BatchController {
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(@PathVariable int batchId) {
 		return batchService.deleteBatch(batchId);
 	}
-
+// no need
 	@Operation(description = "Fetch / Find All Batches in the Database...", summary = "To Fetch All The Batches From The Database")
 	@ApiResponses(value = { @ApiResponse(description = "All Batches Found Successfully...", responseCode = "200"),
 			@ApiResponse(description = "No Batches Found in Database...", responseCode = "200"),
@@ -90,7 +90,7 @@ public class BatchController {
 	@Operation(description = "Fetching / Find Batch by SubjectName And BatchStatus", summary = "To Find Batch Object By SubjectName And BatchStatus...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find Batch for Provided SubjectName And BatchStatus...", responseCode = "404") })
-	@GetMapping("/subjectname-name/{subjectName}/{status}")
+	@GetMapping("/subjectname-status/{subjectName}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(
 			@PathVariable String subjectName, @PathVariable BatchStatus status) {
 		return batchService.findBatchBySubjectNameAndBatchStatus(subjectName, status);
