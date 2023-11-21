@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
+import com.ty.ams.util.UserCategory;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ public class UserController {
 
 	@Autowired
 	private UserServiceImp userServiceImp;
-
+	
 	@Operation(description = "User Object Will be Saved...", summary = "To Save User Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = "User Saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save User To Database", responseCode = "409") })
@@ -69,7 +70,7 @@ public class UserController {
 	@PostMapping("/verify")
 	public ResponseEntity<ResponseStructure<User>> veryfyUserByCredentials(@RequestParam String username,
 			@RequestParam String password) {
-		return userServiceImp.verifyUserByCredentials(username, password);
+		return userServiceImp.findUserByEmailAndPassword(username, password);
 	}
 
 	@Operation(description = "Deleting User by userId", summary = "To Delete User Object By userId...")
@@ -77,7 +78,7 @@ public class UserController {
 			@ApiResponse(description = "Unable To Delete User for Provided userId...", responseCode = "404") })
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<String>> deleteUserByUserId(@PathVariable int userId) {
-		return userServiceImp.deleteUserByUserId(userId);
+		return userServiceImp.deleteUserById(userId);
 	}
 
 	@Operation(description = "Fetching / Find User by phone number", summary = "To Find User Object By phone number...")
@@ -85,7 +86,7 @@ public class UserController {
 			@ApiResponse(description = "Unable To Find User for Provided Phone Number...", responseCode = "404") })
 	@GetMapping("/phone/{phone}")
 	public ResponseEntity<ResponseStructure<User>> findUserByPhoneNumber(@PathVariable long phone) {
-		return userServiceImp.findUserByPhoneNumber(phone);
+		return userServiceImp.findUserByPhone(phone);
 	}
 
 	@Operation(description = "Fetching / Find User by email", summary = "To Find User Object By email...")
@@ -117,7 +118,7 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided UserCategory...", responseCode = "404") })
 	@GetMapping("/category/{category}")
-	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(@PathVariable Category category) {
+	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(@PathVariable UserCategory category) {
 		return userServiceImp.findUserByCategory(category);
 	}
 
