@@ -1,15 +1,17 @@
 package com.ty.ams.service;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ty.ams.entity.BatchAttendance;
 import com.ty.ams.responsestructure.ResponseStructure;
 
 public interface BatchAttendanceService {
-	ResponseEntity<ResponseStructure<BatchAttendance>> saveBatchAttendance(BatchAttendance batchAttendance,int batch_id);
-	ResponseEntity<ResponseStructure<BatchAttendance>> updateBatchAttendance(BatchAttendance batchAttendance);
-	ResponseEntity<ResponseStructure<BatchAttendance>> findBatchAttendanceById(int id);
-	ResponseEntity<ResponseStructure<BatchAttendance>> deleteBatchAttendance(int id);
-	ResponseEntity<ResponseStructure<BatchAttendance>> findBatchAttendanceByBatchId(int id);
+	ResponseEntity<ResponseStructure<BatchAttendance>> saveBatchAttendance(
+			int batch_id, MultipartFile file,int numberOfStudents) throws IOException;
+
+	int findBatchAttendanceCountByBatchId(int batch_id);
 
 }
