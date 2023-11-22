@@ -19,8 +19,6 @@ public interface AttendanceService {
 	
 	ResponseEntity<ResponseStructure<Attendance>> deleteAttandance(int id) ;
 	
-//	ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatus (AttendanceStatus status) ;
-	
 	ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendenceByDate (LocalDate date) ;
 	
 	ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(String status, LocalDate date);

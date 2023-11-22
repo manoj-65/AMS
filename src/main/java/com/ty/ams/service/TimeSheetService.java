@@ -24,9 +24,6 @@ public interface TimeSheetService {
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetOfAll();
 
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(int userId);
-
-	// admin
 	
-
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(TimeSheet timeSheet, int userId);
 }

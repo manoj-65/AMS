@@ -31,9 +31,7 @@ public interface BatchDao {
 	List<Batch> findBatchByBatchMode(BatchMode mode);
 
 	List<Batch> findByUserUserIdAndBatchStatus(int userId, BatchStatus batchStatus);
-//	List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status);
 
 	List<Batch> findByBatchStartDateBetween(LocalDate startDate, LocalDate endDate);
-//	List<Batch> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate);
 
 }

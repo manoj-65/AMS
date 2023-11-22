@@ -85,33 +85,6 @@ public class BatchServiceImp implements BatchService {
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
 
 	}
-//		if (optional.get() != null) {
-//			Batch batch = optional.get();
-//			User u = batch.getUser();
-//			if (u != null) {
-//				List<Batch>  batchs= u.getBatchs();
-//				Iterator<Batch> i=batchs.iterator();
-//				while(i.hasNext()) {
-//					Batch b=i.next();
-//					if (b.getBatchCode() == batch.getBatchCode())
-//						i.remove();
-//				}
-//batchs.removeIf(b -> b.getBatchCode() == batch.getBatchCode());
-
-//				u.setBatchs(batchs);
-//				userDaoImp.updateUser(u);
-//			}
-//
-//			batchDao.deleteBatch(batchId);
-//			ResponseStructure<String> responseStructure = new ResponseStructure();
-//			responseStructure.setBody("");
-//			responseStructure.setMessage("Batch Deleted Successfully");
-//			responseStructure.setStatusCode(HttpStatus.NO_CONTENT.value());
-//			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
-//		} else {
-//			return null;
-//		}
-//	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findAllBatchs() {
@@ -220,10 +193,4 @@ public class BatchServiceImp implements BatchService {
 		}
 		return null;
 	}
-//	@Override
-//	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBetweenDates(LocalDate fromDate, LocalDate toDate) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 }

@@ -32,7 +32,7 @@ public class BatchController {
 
 	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database..")
 	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "422") })
 	@PostMapping
 	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch) {
 		return batchService.saveBatch(batch);
@@ -48,7 +48,7 @@ public class BatchController {
 
 	@Operation(description = "Batch Object Will be Updated...", summary = "To Update Batch Object...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Updated Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Updated Batch To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Updated Batch To Database", responseCode = "404") })
 	@PutMapping
 	public ResponseEntity<ResponseStructure<Batch>> updateBatch(@RequestBody Batch batch) {
 		return batchService.updateBatch(batch);

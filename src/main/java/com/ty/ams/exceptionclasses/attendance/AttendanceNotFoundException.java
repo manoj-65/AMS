@@ -4,7 +4,7 @@ public class AttendanceNotFoundException extends RuntimeException{
 	
 	@Override
 	public String getMessage() {
-		return "The Attendance You are looking for is not found";
+		return "The requested attendance record could not be found.";
 	}
 
 }

@@ -4,6 +4,6 @@ public class TimeSheetAlreadyExists extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return "time sheet already presented for this month";
+		return  "Time sheet has already been submitted for this month." ;
 	}
 }

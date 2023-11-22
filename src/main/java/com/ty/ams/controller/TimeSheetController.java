@@ -28,7 +28,7 @@ public class TimeSheetController {
 
 	@Operation(description = "timesheet Object Will be Saved...", summary = "To Save timesheet Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save timesheet To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Save timesheet To Database", responseCode = "422") })
 	@PostMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveTimeSheet(TimeSheet timeSheet, @PathVariable int userId) {
 		return timeSheetService.saveTimeSheet(timeSheet, userId);
@@ -36,7 +36,7 @@ public class TimeSheetController {
 
 	@Operation(description = "admin timesheet Object Will be Saved...", summary = "To Save admin timesheet Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = " admin timesheet Saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save admin timesheet To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Save admin timesheet To Database", responseCode = "422") })
 	@PostMapping("/admin/{userId}")
 	public ResponseEntity<ResponseStructure<TimeSheet>> saveAdminTimeSheet(@RequestBody TimeSheet timeSheet,
 			@PathVariable int userId) {
@@ -46,7 +46,7 @@ public class TimeSheetController {
 
 	@Operation(description = "timesheet Object Will be Updated...", summary = "To Update timesheet Object...")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Updated Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Updated timesheet To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Updated timesheet To Database", responseCode = "404") })
 	@PutMapping
 	public ResponseEntity<ResponseStructure<TimeSheet>> updateTimeSheet(@RequestBody TimeSheet timeSheet) {
 		return timeSheetService.updateTimeSheet(timeSheet);

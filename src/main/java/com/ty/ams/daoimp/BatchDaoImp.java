@@ -69,10 +69,6 @@ public class BatchDaoImp implements BatchDao {
 		return batchRepository.findByBatchMode(mode);
 	}
 
-//	@Override
-//	public List<Batch> findBatchByUserIdAndBatchStatus(int userId, BatchStatus status) {
-//		return batchRepository.findBatchByUserIdAndBatchStatus(userId, status);
-//	}
 
 	@Override
 	public List<Batch> findByBatchStartDateBetween(LocalDate startDate, LocalDate endDate) {

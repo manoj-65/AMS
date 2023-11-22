@@ -4,7 +4,7 @@ public class TimeSheetDoesNotExist extends RuntimeException {
 	
 	@Override
 	public String getMessage() {
-		return "time sheet does not exist for the mention id";
+		return   "No time sheet found for the specified ID." ;
 	}
 
 }

@@ -36,9 +36,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 	Optional<User> findByPhoneAndPassword(long phone, String password);
 	
-//	List<LocalTime> findByBatchTimingsOfUser(int userId);
 
-//	@Query("select u from User u where u.userStatus = 1?")
-//	Optional<List<User>> findAllActiveUsers();
 
 }

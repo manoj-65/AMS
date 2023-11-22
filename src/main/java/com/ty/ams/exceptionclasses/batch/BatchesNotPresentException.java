@@ -4,6 +4,6 @@ public class BatchesNotPresentException extends RuntimeException{
 
 	@Override
 	public String getMessage() {
-		return "Batches are not present";
+		return  "No batches are currently available.";
 	}
 }

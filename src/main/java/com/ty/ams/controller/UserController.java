@@ -34,7 +34,7 @@ public class UserController {
 	
 	@Operation(description = "User Object Will be Saved...", summary = "To Save User Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = "User Saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save User To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Save User To Database", responseCode = "422") })
 	@PostMapping
 	public ResponseEntity<ResponseStructure<User>> saveUser(@RequestBody User user) {
 		return userServiceImp.saveUser(user);
@@ -42,7 +42,7 @@ public class UserController {
 
 	@Operation(description = "User Object Will be Updated...", summary = "To Update User Object...")
 	@ApiResponses(value = { @ApiResponse(description = "User Updated Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable To Updated User To Database", responseCode = "409") })
+			@ApiResponse(description = "Unable To Updated User To Database", responseCode = "404") })
 	@PutMapping
 	public ResponseEntity<ResponseStructure<User>> updateUser(@RequestBody User user) {
 		return userServiceImp.updateUser(user);

@@ -4,6 +4,6 @@ public class BatchIdNotFoundException extends RuntimeException{
 
 	@Override
 	public String getMessage() {
-		return "Batch Id Not Found, Invalid Batch id";
+		return "Batch ID not found. Please provide a valid Batch ID." ;
 	}
 }

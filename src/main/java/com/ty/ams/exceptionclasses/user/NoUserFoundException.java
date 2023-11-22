@@ -3,6 +3,6 @@ package com.ty.ams.exceptionclasses.user;
 public class NoUserFoundException extends RuntimeException {
 	@Override
 	public String getMessage() {
-		return "No Users Are Present In Database, Database Is Empty...";
+		return "The database is currently empty, and there are no user records present.";
 	}
 }

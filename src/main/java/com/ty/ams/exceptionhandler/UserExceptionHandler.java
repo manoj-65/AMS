@@ -27,7 +27,7 @@ public class UserExceptionHandler {
 			DuplicateEmailException duplicateEmailException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Duplicate Email Encounterd...");
+		structure.setMessage("The email address provided already exists in the database. Please use a unique email address.");
 		structure.setBody(duplicateEmailException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -37,7 +37,7 @@ public class UserExceptionHandler {
 			DuplicatePhoneNumberException duplicatePhoneNumberException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Duplicate Phone Number Encounterd...");
+		structure.setMessage("The phone number provided already exists in the database. Please use a unique phone number.");
 		structure.setBody(duplicatePhoneNumberException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -47,7 +47,7 @@ public class UserExceptionHandler {
 			EmployeeIDNotFoundException employeeIDNotFoundException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
-		structure.setMessage("No Employee Found for Passed EMPID");
+		structure.setMessage( "No employee found for the provided EMPID. Please verify and enter a valid EMPID.");
 		structure.setBody(employeeIDNotFoundException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.NOT_FOUND);
 	}
@@ -57,7 +57,7 @@ public class UserExceptionHandler {
 			IdNotFoundException idNotFoundException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.NOT_FOUND.value());
-		structure.setMessage("No User Found For Passed User Id");
+		structure.setMessage("No user found for the provided user ID. Please verify and enter a valid user ID.");
 		structure.setBody(idNotFoundException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.NOT_FOUND);
 	}
@@ -67,7 +67,7 @@ public class UserExceptionHandler {
 			InvalidEmailOrPasswordException invalidEmailOrPasswordException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Invalid Credentials, Invalid Email or Password...");
+		structure.setMessage("Invalid credentials. Please check the email or password and try again.");
 		structure.setBody(invalidEmailOrPasswordException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -77,7 +77,7 @@ public class UserExceptionHandler {
 			InvalidEmailException invalidEmailException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Invalid Email Encounterd...");
+		structure.setMessage("The email provided is not valid. Please enter a valid email address.");
 		structure.setBody(invalidEmailException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -87,7 +87,7 @@ public class UserExceptionHandler {
 			InvalidPhoneNumberException invalidPhoneNumberException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Invalid Phone Number Encounterd...");
+		structure.setMessage("The phone number you provided is invalid. Please enter a valid phone number.");
 		structure.setBody(invalidPhoneNumberException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -97,7 +97,7 @@ public class UserExceptionHandler {
 			InvalidPhoneNumberOrPasswordException invalidPhoneNumberOrPasswordException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("Invalid Credentials, Invalid Email or Password...");
+		structure.setMessage("Invalid credentials. Please check the email or password entered and try again.");
 		structure.setBody(invalidPhoneNumberOrPasswordException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -107,7 +107,7 @@ public class UserExceptionHandler {
 			NoBatchAssignedException noBatchAssignedException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("No Batchs Assigned for Particular User...");
+		structure.setMessage("No batches have been assigned for the particular user.");
 		structure.setBody(noBatchAssignedException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
@@ -117,7 +117,7 @@ public class UserExceptionHandler {
 			NoUserFoundException noUserFoundException) {
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.BAD_REQUEST.value());
-		structure.setMessage("No Users are Present in Database, Database is Empty...");
+		structure.setMessage("The database is currently empty, and no user records are present.");
 		structure.setBody(noUserFoundException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
