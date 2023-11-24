@@ -42,7 +42,8 @@ import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.Server;
 
 @Configuration
-public class SwaggerConfiguration implements WebMvcConfigurer {
+public class SwaggerConfiguration {
+
 	@Bean
 	public OpenAPI usersMicroserviceOpenAPI() {
 		Server localhost = new Server();
