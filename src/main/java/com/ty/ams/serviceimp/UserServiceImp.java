@@ -2,31 +2,26 @@ package com.ty.ams.serviceimp;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale.Category;
+import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ty.ams.daoimp.UserDaoImp;
+import com.ty.ams.dto.MailRequest;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
-import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
-import com.ty.ams.exceptionclasses.user.InvalidEmailException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
-import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberOrPasswordException;
-import com.ty.ams.exceptionclasses.user.NoBatchAssignedException;
 import com.ty.ams.exceptionclasses.user.NoUserFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.UserService;
@@ -39,6 +34,8 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
+	@Autowired(required = true)
+	private EmailSenderService senderService;
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
@@ -50,6 +47,23 @@ public class UserServiceImp implements UserService {
 			throw new DuplicateEmailException();
 		user.setPassword(user.getEmail().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
 		user = userDaoImp.saveUser(user);
+
+		// sending email
+
+		Map<String, Object> user_map = new HashMap<>();
+		user_map.put("userName", user.getName());
+		user_map.put("userEmail", user.getEmail());
+		user_map.put("userPassword", user.getPassword());
+		MailRequest request = new MailRequest();
+		request.setName(user.getName());
+		request.setSubject("your account has been created successfully");
+		request.setFrom("podichervupavansai@gmail.com");
+		request.setTo(user.getEmail());
+
+		
+		
+		// email-sent successfully
+
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		structure.setMessage("User Saved Successfully...");
@@ -266,4 +280,5 @@ public class UserServiceImp implements UserService {
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 
 	}
+
 }

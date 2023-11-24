@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ty.ams.exceptionclasses.attendance.AttendanceNotFoundException;
-import com.ty.ams.exceptionclasses.attendance.UnableToCreateAttendance;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
 import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;

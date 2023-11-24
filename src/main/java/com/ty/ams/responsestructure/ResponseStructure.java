@@ -1,9 +1,5 @@
  package com.ty.ams.responsestructure;
 
-import java.util.Optional;
-
-import com.ty.ams.entity.Attendance;
-
 import lombok.Getter;
 import lombok.Setter;
 

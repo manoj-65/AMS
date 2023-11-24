@@ -79,5 +79,5 @@ public class BatchDaoImp implements BatchDao {
 	public List<Batch> findByUserUserIdAndBatchStatus(int userId, BatchStatus batchStatus) {
 		return batchRepository.findByUserUserIdAndBatchStatus(userId, batchStatus);
 	}
-
+	
 }
