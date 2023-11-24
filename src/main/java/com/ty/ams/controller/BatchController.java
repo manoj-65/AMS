@@ -118,7 +118,6 @@ public class BatchController {
 	@GetMapping("/userid-status/{userId}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(@PathVariable int userId,
 			@PathVariable BatchStatus status) {
-
 		return batchService.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 

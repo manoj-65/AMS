@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.responsestructure.ResponseStructure;
-import com.ty.ams.util.AttendanceStatus;
 
 public interface AttendanceService {
 	
