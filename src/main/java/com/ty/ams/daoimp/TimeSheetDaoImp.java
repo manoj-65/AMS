@@ -1,19 +1,17 @@
 package com.ty.ams.daoimp;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+
 import com.ty.ams.dao.TimeSheetDao;
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.TimeSheetRepository;
-import com.ty.ams.responsestructure.ResponseStructure;
 
 @Repository
 public class TimeSheetDaoImp implements TimeSheetDao {

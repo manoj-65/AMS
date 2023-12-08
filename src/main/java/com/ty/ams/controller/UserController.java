@@ -34,7 +34,7 @@ public class UserController {
 
 	@Autowired
 	private UserServiceImp userServiceImp;
-	
+
 	@Operation(description = "User Object Will be Saved...", summary = "To Save User Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = "User Saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save User To Database", responseCode = "409") })

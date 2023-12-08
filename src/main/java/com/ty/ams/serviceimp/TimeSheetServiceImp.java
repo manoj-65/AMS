@@ -4,13 +4,16 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
 import com.ty.ams.dao.TimeSheetDao;
 import com.ty.ams.dao.UserDao;
 import com.ty.ams.entity.TimeSheet;
@@ -233,10 +236,10 @@ public class TimeSheetServiceImp implements TimeSheetService {
 			if (user.get() != null) {
 				List<TimeSheet> timeSheets = user.get().getTimeSheets();
 				optTimeSheet = timeSheets.stream()
-						.filter(timeSheet -> timeSheet.getStart_date().getMonth() == currentDate.getMonth()
-								&& timeSheet.getStart_date().getYear() == currentDate.getYear())
-						.findAny();
-				responseStructure.setBody(timeSheets);
+						.filter(timeSheet -> (timeSheet.getStart_date().getMonth().equals(currentDate.getMonth())
+								&& timeSheet.getStart_date().getYear() == currentDate.getYear()))
+						.findFirst();
+				responseStructure.setBody(Arrays.asList(optTimeSheet.get()));
 				responseStructure.setMessage(" FETCHED SUCCESSFULLY");
 				responseStructure.setStatusCode(HttpStatus.OK.value());
 			}
