@@ -2,31 +2,26 @@ package com.ty.ams.serviceimp;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Locale.Category;
+import java.util.Map;
 import java.util.Optional;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ty.ams.daoimp.UserDaoImp;
+import com.ty.ams.dto.MailRequest;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
-import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
-import com.ty.ams.exceptionclasses.user.InvalidEmailException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
-import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberOrPasswordException;
-import com.ty.ams.exceptionclasses.user.NoBatchAssignedException;
 import com.ty.ams.exceptionclasses.user.NoUserFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.UserService;
@@ -39,20 +34,35 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
+	@Autowired(required = true)
+	private EmailSenderService senderService;
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
-//	if (user == null)
-//	throw new NullPointerException("User Object Is Null no data Found in Request Body...");
 		if (!Pattern.compile("[6-9]{1}[0-9]{9}").matcher("" + user.getPhone()).matches())
 			throw new InvalidPhoneNumberException();
 		if (userDaoImp.findUserByPhoneNumber(user.getPhone()).isPresent())
 			throw new DuplicatePhoneNumberException();
 		if (userDaoImp.findUserByEmail(user.getEmail()).isPresent())
 			throw new DuplicateEmailException();
-
 		user.setPassword(user.getEmail().substring(0, 4) + (user.getPhone() + "").substring(6, 10));
 		user = userDaoImp.saveUser(user);
+
+		// sending email
+
+		Map<String, Object> user_map = new HashMap<>();
+		user_map.put("userName", user.getName());
+		user_map.put("userEmail", user.getEmail());
+		user_map.put("userPassword", user.getPassword());
+		MailRequest request = new MailRequest();
+		request.setName(user.getName());
+		request.setSubject("your account has been created successfully");
+		request.setFrom("podichervupavansai@gmail.com");
+		request.setTo(user.getEmail());
+		senderService.sendEmail(request, user_map);
+
+		// email-sent successfully
+
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.CREATED.value());
 		structure.setMessage("User Saved Successfully...");
@@ -84,7 +94,7 @@ public class UserServiceImp implements UserService {
 		structure.setBody(optional.get());
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<User>> findUserByEmpId(String id) {
 		Optional<User> optional = userDaoImp.findUserByEmpId(id);
@@ -96,9 +106,6 @@ public class UserServiceImp implements UserService {
 		structure.setBody(optional.get());
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
-	
-	
 
 	@Override
 	public ResponseEntity<ResponseStructure<String>> deleteUserById(int id) {
@@ -180,10 +187,10 @@ public class UserServiceImp implements UserService {
 		structure.setBody(users);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByRole(UserRole role) {
-		
+
 		List<User> users = userDaoImp.findUserByRole(role);
 		if (users.isEmpty())
 			throw new NoUserFoundException();
@@ -193,7 +200,7 @@ public class UserServiceImp implements UserService {
 		structure.setBody(users);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(UserCategory category) {
 		List<User> users = userDaoImp.findUserByCategory(category);
@@ -205,7 +212,7 @@ public class UserServiceImp implements UserService {
 		structure.setBody(users);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<List<User>>> findUserByStatus(UserStatus status) {
 		List<User> users = userDaoImp.findUserByStatus(status);
@@ -217,18 +224,16 @@ public class UserServiceImp implements UserService {
 		structure.setBody(users);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
-	
+
 	@Override
 	public ResponseEntity<ResponseStructure<List<LocalTime>>> findBatchTimingsOfUser(int userId) {
 		// TODO Auto-generated method stub
 		Optional<User> optional = userDaoImp.findUserById(userId);
 		if (optional.isEmpty())
 			throw new IdNotFoundException();
-		List<Batch> batchs=optional.get().getBatchs();
-		List<LocalTime> localTimes=new ArrayList<>();
-		for(Batch b:batchs)
-		{
+		List<Batch> batchs = optional.get().getBatchs();
+		List<LocalTime> localTimes = new ArrayList<>();
+		for (Batch b : batchs) {
 			localTimes.add(b.getLoginTime());
 		}
 		ResponseStructure<List<LocalTime>> structure = new ResponseStructure<>();
@@ -237,7 +242,6 @@ public class UserServiceImp implements UserService {
 		structure.setBody(localTimes);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> findUserByPhone(long phone) {
@@ -250,9 +254,9 @@ public class UserServiceImp implements UserService {
 		structure.setBody(optional.get());
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
-	
+
 	@Override
-	public ResponseEntity<ResponseStructure<User>>findUserByEmail(String email){
+	public ResponseEntity<ResponseStructure<User>> findUserByEmail(String email) {
 		Optional<User> optional = userDaoImp.findUserByEmail(email);
 		if (optional.isEmpty())
 			throw new NoUserFoundException();
@@ -266,24 +270,21 @@ public class UserServiceImp implements UserService {
 	@Override
 	public ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(int userId) {
 		// TODO Auto-generated method stub
-		
+
 		Optional<User> optional = userDaoImp.findUserById(userId);
 		if (optional.isEmpty())
 			throw new NoUserFoundException();
-		User u=optional.get();
+		User u = optional.get();
 		u.setUserStatus(UserStatus.IN_ACTIVE);
-		User user= userDaoImp.saveUser(u);
+		User user = userDaoImp.saveUser(u);
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("User Updated Successfully...");
 		structure.setBody(user);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
-		
+
 	}
 
-	
-
-	
 //	@Override
 //	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
 ////		if (user == null)

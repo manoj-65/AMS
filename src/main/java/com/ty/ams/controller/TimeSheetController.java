@@ -1,8 +1,13 @@
 package com.ty.ams.controller;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,14 +18,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.ty.ams.entity.TimeSheet;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.TimeSheetService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.servlet.http.HttpServletResponse;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("timesheet")
@@ -28,6 +33,9 @@ public class TimeSheetController {
 
 	@Autowired
 	TimeSheetService timeSheetService;
+
+	@Autowired
+	ExcelSheetController excelSheetController;
 
 	@Operation(description = "timesheet Object Will be Saved...", summary = "To Save timesheet Object to Database...")
 	@ApiResponses(value = { @ApiResponse(description = "timesheet Saved Successfully", responseCode = "201"),
@@ -106,5 +114,30 @@ public class TimeSheetController {
 	public ResponseEntity<ResponseStructure<List<TimeSheet>>> fetchCurrentMonthTimeSheetofUser(
 			@PathVariable int userId) {
 		return timeSheetService.fetchCurrentMonthTimeSheetofUser(userId);
+	}
+
+//	@GetMapping("currentUser/v2/{userId}")
+//	public EntityModel<TimeSheet> fetchCurrentMonthTimeSheetofUserHat(@PathVariable int userId,
+//			HttpServletResponse response) throws IOException {
+//		TimeSheet timesheet = timeSheetService.fetchCurrentMonthTimeSheetofUser(userId).getBody().getBody().stream()
+//				.findFirst().orElse(null);
+//		EntityModel<TimeSheet> model = EntityModel.of(timesheet);
+//		WebMvcLinkBuilder linkBuilder = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
+//				.methodOn(excelSheetController.getClass()).generateExcelForOneUserOfOneMonth(response, userId));
+//		String excelUri = ServletUriComponentsBuilder.fromCurrentRequest().path("/excel/{userId}")
+//				.buildAndExpand(userId).toUri().toString();
+//		model.add(Link.of(excelUri).withRel("links"));
+//		return model;
+//	}
+
+	@GetMapping("currentUser/v3/{userId}")
+	public EntityModel<TimeSheet> fetchCurrentMonthTimeSheetofUserHat1(@PathVariable int userId,
+			HttpServletResponse response) throws IOException {
+		TimeSheet timesheet = timeSheetService.fetchCurrentMonthTimeSheetofUser(userId).getBody().getBody().stream()
+				.findFirst().orElse(null);
+		String excelUrl = "http://localhost:8080/excel/" + userId;
+		EntityModel<TimeSheet> model = EntityModel.of(timesheet);
+		model.add(Link.of(excelUrl).withRel("convert timesheet data into excel"));
+		return model;
 	}
 }

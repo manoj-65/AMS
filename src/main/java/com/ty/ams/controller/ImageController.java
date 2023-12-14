@@ -18,7 +18,7 @@ import com.ty.ams.service.ImageService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 public class ImageController {
-	
+
 	@Autowired
 	ImageService imageService;
 
@@ -38,4 +38,3 @@ public class ImageController {
 
 	}
 }
-
