@@ -109,10 +109,12 @@ public class TimeSheetServiceImp implements TimeSheetService {
 			month = 1;
 			year += 1;
 			inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-d");
+			return LocalDate.parse(year + "-0" + month + "-" + endDate, inputFormatter);
 		} else if (month == 12 && endDate >= 10 && endDate <= 31) {
-			month = 1;
+			month = 01;
 			year += 1;
 			inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			return LocalDate.parse(year + "-0" + month + "-" + endDate, inputFormatter);
 		}
 		return LocalDate.parse(year + "-" + month + "-" + endDate, inputFormatter);
 	}
