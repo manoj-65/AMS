@@ -55,7 +55,7 @@ public class UserController {
 		return userServiceImp.findUserById(userId);
 	}
 
-	@Operation(description = "Fetching / Find User by empId", summary = "To Find User Object By empId...")
+	@Operation(description = "Send EmpId as path variable &nbsp;  &nbsp;  Ex:- /user/empid/TYP9999", summary = "To Find User Object By empId...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided empId...", responseCode = "404") })
 	@GetMapping("/empid/{empId}")
@@ -80,7 +80,7 @@ public class UserController {
 		return userServiceImp.deleteUserByUserId(userId);
 	}
 
-	@Operation(description = "Fetching / Find User by phone number", summary = "To Find User Object By phone number...")
+	@Operation(description = "Send PhoneNumber as path variable &nbsp; &nbsp;   Ex:- /user/phone/7837362634 ", summary = "To Find User Object By phone number...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided Phone Number...", responseCode = "404") })
 	@GetMapping("/phone/{phone}")
@@ -88,7 +88,7 @@ public class UserController {
 		return userServiceImp.findUserByPhoneNumber(phone);
 	}
 
-	@Operation(description = "Fetching / Find User by email", summary = "To Find User Object By email...")
+	@Operation(description = "Send Email as path variable &nbsp;  &nbsp;  Ex:- /user/email/xyz@gmail.com", summary = "To Find User Object By email...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided email...", responseCode = "404") })
 	@GetMapping("/email/{email}")
@@ -105,7 +105,7 @@ public class UserController {
 		return userServiceImp.findAllUsers();
 	}
 
-	@Operation(description = "Fetching / Find User by UserRole", summary = "To Find User Object By UserRole...")
+	@Operation(description = "Send UserRole as path variable &nbsp; &nbsp; &nbsp;  [ ADMIN, HR, TRAINER ] &nbsp; &nbsp;  Ex:- /user/role/ADMIN ", summary = "To Find User Object By UserRole...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided UserRole...", responseCode = "404") })
 	@GetMapping("/role/{role}")
@@ -121,7 +121,7 @@ public class UserController {
 		return userServiceImp.findUserByCategory(category);
 	}
 
-	@Operation(description = "Fetching / Find User by UserStatus", summary = "To Find User Object By UserStatus...")
+	@Operation(description = "Send the UserStatus as path variable &nbsp; &nbsp; &nbsp; &nbsp;  &nbsp; [ ACTIVE, IN_ACTIVE ] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;  Ex: - /user/status/ACTIVE ", summary = "To Find User Object By UserStatus...")
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided UserStatus...", responseCode = "404") })
 	@GetMapping("/status/{status}")
