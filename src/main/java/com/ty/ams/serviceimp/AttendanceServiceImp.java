@@ -7,18 +7,20 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import com.ty.ams.dao.TimeSheetDao;
+import com.ty.ams.dao.UserDao;
 import com.ty.ams.daoimp.AttendanceDaoImp;
-import com.ty.ams.daoimp.TimeSheetDaoImp;
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.entity.TimeSheet;
-import com.ty.ams.exceptionclasses.user.AttendanceNotFoundException;
+import com.ty.ams.exceptionclasses.attendance.AttendanceNotFoundException;
+import com.ty.ams.exceptionclasses.attendance.UnableToCreateAttendance;
+import com.ty.ams.exceptionclasses.timesheet.TimeSheetDoesNotExist;
 import com.ty.ams.exceptionclasses.user.AttendanceNotFoundWithTheEnterdDate;
-import com.ty.ams.exceptionclasses.user.UnableToCreateAttendance;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.AttendanceService;
+import com.ty.ams.service.TimeSheetService;
 import com.ty.ams.util.AttendanceStatus;
 
 @Service
@@ -26,22 +28,27 @@ public class AttendanceServiceImp implements AttendanceService {
 
 	@Autowired
 	private AttendanceDaoImp dao;
-	
+
 	@Autowired
-	private TimeSheetDaoImp timeSheetDao ;
+	private TimeSheetDao timeSheetDao;
+
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	TimeSheetService timeSheetService;
 
 	@Override
-	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance, int timesheetId) {
-		
-		TimeSheet timeSheet = timeSheetDao.findBytimesheet_id(timesheetId).get() ;
-		
+	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(Attendance attendance, int userId) {
+		Optional<TimeSheet> timeSheet = timeSheetDao.fetchCurrentMonthTimeSheetofUser(userId);
+		if (timeSheet.isEmpty()) {
+			timeSheetService.saveTimeSheet(new TimeSheet(), userId);
+		}
 		if (attendance != null && timeSheet != null) {
-
 			ResponseStructure<Attendance> response = new ResponseStructure<Attendance>();
 			response.setStatusCode(HttpStatus.CREATED.value());
 			response.setMessage(HttpStatus.CREATED.getReasonPhrase());
 			response.setBody(attendance);
-			timeSheet.getAttendences().add(attendance) ;
+			timeSheet.get().getAttendences().add(attendance);
 			dao.saveAttendance(attendance);
 			return new ResponseEntity<ResponseStructure<Attendance>>(response, HttpStatus.CREATED);
 		}
@@ -56,7 +63,6 @@ public class AttendanceServiceImp implements AttendanceService {
 			response.setStatusCode(HttpStatus.FOUND.value());
 			response.setMessage(HttpStatus.FOUND.getReasonPhrase());
 			response.setBody(dao.findById(id).get());
-			System.out.println(dao.findById(id));
 			return new ResponseEntity<ResponseStructure<Attendance>>(response, HttpStatus.FOUND);
 		}
 		throw new AttendanceNotFoundException();
@@ -66,7 +72,6 @@ public class AttendanceServiceImp implements AttendanceService {
 	public ResponseEntity<ResponseStructure<Attendance>> updateAttandance(Attendance attendance) {
 
 		if (attendance != null) {
-
 			ResponseStructure<Attendance> response = new ResponseStructure<Attendance>();
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
@@ -95,7 +100,7 @@ public class AttendanceServiceImp implements AttendanceService {
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatus(String status) {
-		
+
 		if (dao.findAllAttendanceByAttendanceStatus(AttendanceStatus.valueOf(status.toUpperCase())) != null) {
 			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
 			response.setStatusCode(HttpStatus.OK.value());
@@ -121,17 +126,33 @@ public class AttendanceServiceImp implements AttendanceService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(
-			String status, LocalDate date) {
-
-		if (dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()) , date) != null) {
-			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>() ;
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByAttendanceStatusAndDate(String status,
+			LocalDate date) {
+		List<Attendance> attendances = dao
+				.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date);
+		if (attendances != null && !attendances.isEmpty()) {
+			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
 			response.setStatusCode(HttpStatus.OK.value());
 			response.setMessage(HttpStatus.OK.getReasonPhrase());
-			response.setBody(dao.findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus.valueOf(status.toUpperCase()), date));
+			response.setBody(attendances);
 			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
 		}
 		throw new AttendanceNotFoundWithTheEnterdDate();
+
 	}
 
+	@Override
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAttendanceByTimeSheetId(int attendanceId) {
+
+		TimeSheet timesheet = timeSheetDao.findBytimesheet_id(attendanceId).get();
+		if (timesheet != null) {
+
+			ResponseStructure<List<Attendance>> response = new ResponseStructure<List<Attendance>>();
+			response.setStatusCode(HttpStatus.OK.value());
+			response.setMessage(HttpStatus.OK.getReasonPhrase());
+			response.setBody(timesheet.getAttendences());
+			return new ResponseEntity<ResponseStructure<List<Attendance>>>(response, HttpStatus.OK);
+		}
+		throw new TimeSheetDoesNotExist();
+	}
 }

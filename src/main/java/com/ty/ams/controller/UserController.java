@@ -2,9 +2,10 @@ package com.ty.ams.controller;
 
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Locale.Category;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -15,15 +16,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
+import com.ty.ams.util.UserCategory;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
@@ -69,7 +73,7 @@ public class UserController {
 	@PostMapping("/verify")
 	public ResponseEntity<ResponseStructure<User>> veryfyUserByCredentials(@RequestParam String username,
 			@RequestParam String password) {
-		return userServiceImp.verifyUserByCredentials(username, password);
+		return userServiceImp.findUserByEmailAndPassword(username, password);
 	}
 
 	@Operation(description = "Deleting User by userId", summary = "To Delete User Object By userId...")
@@ -77,7 +81,7 @@ public class UserController {
 			@ApiResponse(description = "Unable To Delete User for Provided userId...", responseCode = "404") })
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<String>> deleteUserByUserId(@PathVariable int userId) {
-		return userServiceImp.deleteUserByUserId(userId);
+		return userServiceImp.deleteUserById(userId);
 	}
 
 	@Operation(description = "Send PhoneNumber as path variable &nbsp; &nbsp;   Ex:- /user/phone/7837362634 ", summary = "To Find User Object By phone number...")
@@ -85,7 +89,7 @@ public class UserController {
 			@ApiResponse(description = "Unable To Find User for Provided Phone Number...", responseCode = "404") })
 	@GetMapping("/phone/{phone}")
 	public ResponseEntity<ResponseStructure<User>> findUserByPhoneNumber(@PathVariable long phone) {
-		return userServiceImp.findUserByPhoneNumber(phone);
+		return userServiceImp.findUserByPhone(phone);
 	}
 
 	@Operation(description = "Send Email as path variable &nbsp;  &nbsp;  Ex:- /user/email/xyz@gmail.com", summary = "To Find User Object By email...")
@@ -117,7 +121,7 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(description = "User Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find User for Provided UserCategory...", responseCode = "404") })
 	@GetMapping("/category/{category}")
-	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(@PathVariable Category category) {
+	public ResponseEntity<ResponseStructure<List<User>>> findUserByCategory(@PathVariable UserCategory category) {
 		return userServiceImp.findUserByCategory(category);
 	}
 
