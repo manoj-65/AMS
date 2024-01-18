@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
 
@@ -43,6 +44,7 @@ public class Batch {
 	private BatchMode batchMode;
 	private String instituteName;
 	private String location;
+	@JsonIgnore
 	@ManyToOne
 	private User user;
 
