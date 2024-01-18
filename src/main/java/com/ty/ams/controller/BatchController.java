@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import com.ty.ams.util.BatchStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/batch")
 public class BatchController {
@@ -62,7 +63,7 @@ public class BatchController {
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(@PathVariable int batchId) {
 		return batchService.deleteBatch(batchId);
 	}
-
+// no need
 	@Operation(description = "Fetch / Find All Batches in the Database...", summary = "To Fetch All The Batches From The Database")
 	@ApiResponses(value = { @ApiResponse(description = "All Batches Found Successfully...", responseCode = "200"),
 			@ApiResponse(description = "No Batches Found in Database...", responseCode = "200"),
@@ -91,7 +92,7 @@ public class BatchController {
 	@Operation(description = "Fetching / Find Batch by SubjectName And BatchStatus", summary = "To Find Batch Object By SubjectName And BatchStatus...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find Batch for Provided SubjectName And BatchStatus...", responseCode = "404") })
-	@GetMapping("/subjectname-name/{subjectName}/{status}")
+	@GetMapping("/subjectname-status/{subjectName}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(
 			@PathVariable String subjectName, @PathVariable BatchStatus status) {
 		return batchService.findBatchBySubjectNameAndBatchStatus(subjectName, status);
@@ -119,7 +120,6 @@ public class BatchController {
 	@GetMapping("/userid-status/{userId}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(@PathVariable int userId,
 			@PathVariable BatchStatus status) {
-
 		return batchService.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 

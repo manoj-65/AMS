@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -29,6 +30,7 @@ public class Batch {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int batchId;
+	@Column(unique = true)
 	private String batchCode;
 	private String subjectName;
 	@Enumerated(EnumType.STRING)
