@@ -13,7 +13,7 @@ import com.ty.ams.util.BatchStatus;
 public interface BatchService {
 	ResponseEntity<ResponseStructure<Batch>> findBatchById(int batchId);
 
-	ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch);
+	ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch, int userId);
 
 	ResponseEntity<ResponseStructure<Batch>> updateBatch(Batch batch);
 

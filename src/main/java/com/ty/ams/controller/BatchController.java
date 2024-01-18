@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ty.ams.entity.Batch;
@@ -35,8 +36,8 @@ public class BatchController {
 	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch) {
-		return batchService.saveBatch(batch);
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch, @RequestParam int userId) {
+		return batchService.saveBatch(batch, userId);
 	}
 
 	@Operation(description = "Fetching / Find Batch by batchId", summary = "To Find Batch Object By batchId...")
