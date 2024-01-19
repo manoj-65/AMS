@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
@@ -27,6 +28,7 @@ import com.ty.ams.util.UserStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value = "/user")
@@ -151,6 +153,10 @@ public class UserController {
 	public ResponseEntity<ResponseStructure<User>> setUserStatusToInAcativeByUserId(@PathVariable int userId) {
 		return userServiceImp.setUserStatusToInAcativeByUserId(userId);
 
+	}
+	@GetMapping("/findAllTrainers")
+	public ResponseEntity<ResponseStructure<List<UserDto>>> findAllTrainersToAssiginBatch() {
+		return userServiceImp.findAllTrainersToAssiginBatch();
 	}
 
 }
