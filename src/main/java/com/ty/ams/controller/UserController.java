@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,13 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-<<<<<<< HEAD
 import org.springframework.web.multipart.MultipartFile;
 
-=======
-
+import com.fasterxml.jackson.annotation.JacksonInject.Value;
 import com.ty.ams.dto.UserDto;
->>>>>>> 82e247d20e7087f643f9075fa9af3c9904acc725
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
@@ -161,11 +159,6 @@ public class UserController {
 		return userServiceImp.setUserStatusToInAcativeByUserId(userId);
 
 	}
-<<<<<<< HEAD
-	
-	
-	
-	
 	
 	@ResponseBody
 	@PostMapping("/img1")
@@ -179,11 +172,20 @@ public class UserController {
 	
 	
 	
-=======
 	@GetMapping("/findAllTrainers")
 	public ResponseEntity<ResponseStructure<List<UserDto>>> findAllTrainersToAssiginBatch() {
 		return userServiceImp.findAllTrainersToAssiginBatch();
 	}
->>>>>>> 82e247d20e7087f643f9075fa9af3c9904acc725
+	
+	@Operation(summary = "To Assign A batch To User", description = "The batchID and userID will be sent as RequestParameters with key batchId and userID")
+	@ApiResponses(value = {@ApiResponse(description="User Will be Assigned With The Given Batch Id ",responseCode = "200"),@ApiResponse(description = "Unable To Assign Batch To User Invalid User Id or Batch Id, Bad Request...",responseCode = "400")})
+	@PostMapping("/assignbatch")
+	public ResponseEntity<ResponseStructure<User>> assignBatchToUserByBatchIdaAndUserId(@RequestParam int batchId, @RequestParam int userId){
+		return userServiceImp.assignBatchToUser(batchId, userId);
+	}
+	
+	
+	
+
 
 }

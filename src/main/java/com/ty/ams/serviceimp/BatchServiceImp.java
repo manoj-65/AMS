@@ -73,6 +73,15 @@ public class BatchServiceImp implements BatchService {
 		}
 		throw new UserNotFoundException("User With the Given Id " + userId + " Not Found");
 	}
+	@Override
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch) {
+			ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
+			batchDao.saveBatch(batch);
+			responseStructure.setBody(batch);
+			responseStructure.setMessage("Batch created Successfully");
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
+	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<Batch>> updateBatch(Batch batch) {

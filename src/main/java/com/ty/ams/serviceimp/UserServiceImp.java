@@ -13,13 +13,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ty.ams.daoimp.BatchDaoImp;
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.dto.MailRequest;
 import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.batch.BatchIdNotFoundException;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
+import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
@@ -36,6 +39,8 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
+	@Autowired
+	private BatchDaoImp batchDaoImp;
 	@Autowired(required = true)
 	private EmailSenderService senderService;
 	@Autowired
@@ -297,6 +302,36 @@ public class UserServiceImp implements UserService {
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("Found");
 		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<User>> assignBatchToUser(int batchId, int userId) {
+		Optional<User> user1 = userDaoImp.findUserById(userId);
+		if(user1.isEmpty()) {
+			throw new EmployeeIDNotFoundException();
+		}
+		Optional<Batch> batch1 = batchDaoImp.findBatchById(batchId);
+		if(batch1.isEmpty()) {
+			throw new BatchIdNotFoundException();
+		}
+		User user = user1.get();
+		Batch batch = batch1.get();
+		List<Batch> batchs = user.getBatchs();
+		try {
+			batchs.add(batch);
+		}catch(Exception e) {
+			batchs = new ArrayList<>();
+			batchs.add(batch);
+		}
+		batch.setUser(user);
+		batchDaoImp.updateBatch(batch);
+		user.setBatchs(batchs);
+		userDaoImp.updateUser(user);
+		ResponseStructure<User> structure = new ResponseStructure<>();
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("Batch Assigned To User Successfully...");
+		structure.setBody(user);
+		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 //	@Override

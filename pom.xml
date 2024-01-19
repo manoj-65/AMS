@@ -60,13 +60,11 @@
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.0.2</version>
 		</dependency>
-<<<<<<< HEAD
-		 <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>2.6</version>
-    </dependency>
-=======
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
 		<!-- mail  dependencies-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -91,9 +89,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
-
-
->>>>>>> 82e247d20e7087f643f9075fa9af3c9904acc725
 	</dependencies>
 	<build>
 		<plugins>
