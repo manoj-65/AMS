@@ -15,7 +15,14 @@ import com.ty.ams.dao.BatchDao;
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.batch.BatchCodeNotFoundException;
+import com.ty.ams.exceptionclasses.batch.BatchIdNotFoundException;
+import com.ty.ams.exceptionclasses.batch.BatchesNotPresentException;
+import com.ty.ams.exceptionclasses.batch.NoSuchBatchModeFoundException;
+import com.ty.ams.exceptionclasses.batch.StartedDateInvalidException;
+import com.ty.ams.exceptionclasses.batch.SubjectNameNotFoundExcpetion;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
+import com.ty.ams.exceptionclasses.user.UserNotFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.BatchService;
 import com.ty.ams.util.BatchMode;
@@ -34,7 +41,7 @@ public class BatchServiceImp implements BatchService {
 	public ResponseEntity<ResponseStructure<Batch>> findBatchById(int batchId) {
 		Optional<Batch> optional = batchDao.findBatchById(batchId);
 		if (optional.isEmpty())
-			throw new IdNotFoundException();
+			throw new BatchIdNotFoundException();
 
 		ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
 		responseStructure.setBody(optional.get());
@@ -45,12 +52,26 @@ public class BatchServiceImp implements BatchService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch) {
-		ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
-		responseStructure.setBody(batchDao.saveBatch(batch));
-		responseStructure.setMessage("Batch created Successfully");
-		responseStructure.setStatusCode(HttpStatus.CREATED.value());
-		return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch, int userId) {
+		Optional<User> optional = userDaoImp.findUserById(userId);
+		if (optional.isPresent()) {
+			User user = optional.get();
+			batch.setUser(user);
+			batch = batchDao.saveBatch(batch);
+			List<Batch> batches = user.getBatchs();
+			if (batches == null) {
+				batches = new ArrayList<>();
+			}
+			batches.add(batch);
+			user.setBatchs(batches);
+			userDaoImp.saveUser(user);
+			ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
+			responseStructure.setBody(batch);
+			responseStructure.setMessage("Batch created Successfully");
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
+		}
+		throw new UserNotFoundException("User With the Given Id " + userId + " Not Found");
 	}
 
 	@Override
@@ -65,29 +86,31 @@ public class BatchServiceImp implements BatchService {
 	@Override
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(int batchId) {
 		Optional<Batch> optional = batchDao.findBatchById(batchId);
-		if (optional.get() != null) {
-			Batch batch = optional.get();
-			batch.setBatchStatus(BatchStatus.COMPLETED);
-			batchDao.updateBatch(batch);
-			ResponseStructure<String> responseStructure = new ResponseStructure();
-			responseStructure.setBody("");
-			responseStructure.setMessage("Batch Deleted Successfully");
-			responseStructure.setStatusCode(HttpStatus.NO_CONTENT.value());
-			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
+		if (optional.isEmpty())
+			throw new BatchIdNotFoundException();
+		Batch batch = optional.get();
+		batch.setBatchStatus(BatchStatus.COMPLETED);
+		batchDao.updateBatch(batch);
+		ResponseStructure<String> responseStructure = new ResponseStructure();
+		responseStructure.setBody("");
+		responseStructure.setMessage("Batch Deleted Successfully");
+		responseStructure.setStatusCode(HttpStatus.NO_CONTENT.value());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NO_CONTENT);
 
-		} else {
-			return null;
-		}
 	}
 //		if (optional.get() != null) {
 //			Batch batch = optional.get();
 //			User u = batch.getUser();
 //			if (u != null) {
-//				List<Batch> batchs = u.getBatchs();
-//				for (Batch b : batchs) {
+//				List<Batch>  batchs= u.getBatchs();
+//				Iterator<Batch> i=batchs.iterator();
+//				while(i.hasNext()) {
+//					Batch b=i.next();
 //					if (b.getBatchCode() == batch.getBatchCode())
-//						batchs.remove(batch);
+//						i.remove();
 //				}
+//batchs.removeIf(b -> b.getBatchCode() == batch.getBatchCode());
+
 //				u.setBatchs(batchs);
 //				userDaoImp.updateUser(u);
 //			}
@@ -101,85 +124,85 @@ public class BatchServiceImp implements BatchService {
 //		} else {
 //			return null;
 //		}
-//}
+//	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findAllBatchs() {
 		List<Batch> batchs = batchDao.findAllBatchs();
-		if (!batchs.isEmpty()) {
-			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batchs);
-			responseStructure.setMessage("All Batches are Fetched Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batchs.isEmpty())
+			throw new BatchesNotPresentException();
+		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batchs);
+		responseStructure.setMessage("All Batches are Fetched Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<Batch>> findBatchByBatchCode(String batchCode) {
 		Batch batch = batchDao.findBatchByBatchCode(batchCode);
-		if (batch != null) {
-			ResponseStructure<Batch> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batch);
-			responseStructure.setMessage("Batch Fetched  By BatchCode Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batch == null)
+			throw new BatchCodeNotFoundException();
+		ResponseStructure<Batch> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batch);
+		responseStructure.setMessage("Batch Fetched  By BatchCode Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectName(String subjectName) {
 		List<Batch> batchs = batchDao.findBatchBySubjectName(subjectName);
-		if (!batchs.isEmpty()) {
-			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batchs);
-			responseStructure.setMessage("Batches Fetched  By BatchName Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batchs.isEmpty())
+			throw new SubjectNameNotFoundExcpetion();
+		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batchs);
+		responseStructure.setMessage("Batches Fetched  By BatchName Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(String subjectName,
 			BatchStatus status) {
 		List<Batch> batchs = batchDao.findBatchBySubjectNameAndBatchStatus(subjectName, status);
-		if (!batchs.isEmpty()) {
-			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batchs);
-			responseStructure.setMessage("Batchs Fetched  By BatchName and BatchStatus Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batchs.isEmpty())
+			throw new SubjectNameNotFoundExcpetion();
+		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batchs);
+		responseStructure.setMessage("Batchs Fetched  By BatchName and BatchStatus Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByStartedDate(LocalDate startDate) {
 		List<Batch> batchs = batchDao.findBatchByStartedDate(startDate);
-		if (!batchs.isEmpty()) {
-			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batchs);
-			responseStructure.setMessage("Batchs Fetched  By StartDate Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batchs.isEmpty())
+			throw new StartedDateInvalidException();
+		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batchs);
+		responseStructure.setMessage("Batchs Fetched  By StartDate Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByBatchMode(BatchMode mode) {
 		List<Batch> batchs = batchDao.findBatchByBatchMode(mode);
-		if (!batchs.isEmpty()) {
-			ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
-			responseStructure.setBody(batchs);
-			responseStructure.setMessage("Batchs Fetched  By BatchMode Successfully");
-			responseStructure.setStatusCode(HttpStatus.OK.value());
-			return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
-		}
-		return null;
+		if (batchs.isEmpty())
+			throw new NoSuchBatchModeFoundException();
+		ResponseStructure<List<Batch>> responseStructure = new ResponseStructure();
+		responseStructure.setBody(batchs);
+		responseStructure.setMessage("Batchs Fetched  By BatchMode Successfully");
+		responseStructure.setStatusCode(HttpStatus.OK.value());
+		return new ResponseEntity<ResponseStructure<List<Batch>>>(responseStructure, HttpStatus.OK);
+
 	}
 
 	@Override

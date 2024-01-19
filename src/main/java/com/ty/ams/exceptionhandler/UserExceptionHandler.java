@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.ty.ams.exceptionclasses.user.AttendanceNotFoundException;
+import com.ty.ams.exceptionclasses.attendance.AttendanceNotFoundException;
+import com.ty.ams.exceptionclasses.attendance.UnableToCreateAttendance;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
 import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
@@ -16,7 +17,7 @@ import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberOrPasswordException;
 import com.ty.ams.exceptionclasses.user.NoBatchAssignedException;
 import com.ty.ams.exceptionclasses.user.NoUserFoundException;
-import com.ty.ams.exceptionclasses.user.UnableToCreateAttendance;
+import com.ty.ams.exceptionclasses.user.UserNotFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 
 @RestControllerAdvice
@@ -121,23 +122,23 @@ public class UserExceptionHandler {
 		structure.setBody(noUserFoundException.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@ExceptionHandler(UnableToCreateAttendance.class)
 	public ResponseEntity<ResponseStructure<String>> unableToCreateAttendance(
-			UnableToCreateAttendance unableToCreateAttendance){
-		
+			UnableToCreateAttendance unableToCreateAttendance) {
+
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.CONFLICT.value());
-		structure.setMessage("Unable to create the Attendance");
+		structure.setMessage("Unable to create the Attendance Check The Details And TimeSheet ID");
 		structure.setBody(unableToCreateAttendance.getMessage());
 		return new ResponseEntity<>(structure, HttpStatus.CONFLICT);
-		
+
 	}
-	
+
 	@ExceptionHandler(AttendanceNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> attendanceNotFoundException(
-			AttendanceNotFoundException attendanceNotFoundException ){
-		
+			AttendanceNotFoundException attendanceNotFoundException) {
+
 		ResponseStructure<String> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.NO_CONTENT.value());
 		structure.setMessage("Unable to find the attendance with mention details...");
@@ -145,4 +146,14 @@ public class UserExceptionHandler {
 		return new ResponseEntity<>(structure, HttpStatus.NO_CONTENT);
 	}
 
-} 
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> handleUserNotFoundException(UserNotFoundException exception) {
+
+		ResponseStructure<String> structure = new ResponseStructure<>();
+		structure.setStatusCode(HttpStatus.NO_CONTENT.value());
+		structure.setMessage("Unable to find the attendance with mention details...");
+		structure.setBody(exception.getMessage());
+		return new ResponseEntity<>(structure, HttpStatus.NO_CONTENT);
+	}
+
+}
