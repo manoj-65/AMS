@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.dto.MailRequest;
+import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
@@ -28,6 +29,7 @@ import com.ty.ams.service.UserService;
 import com.ty.ams.util.UserCategory;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
+import com.ty.ams.util.UserUtill;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -36,6 +38,8 @@ public class UserServiceImp implements UserService {
 	private UserDaoImp userDaoImp;
 	@Autowired(required = true)
 	private EmailSenderService senderService;
+	@Autowired
+	private UserUtill userUtill;
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
@@ -283,6 +287,16 @@ public class UserServiceImp implements UserService {
 		structure.setBody(user);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 
+	}
+
+	public ResponseEntity<ResponseStructure<List<UserDto>>> findAllTrainersToAssiginBatch() {
+		List<User> users = userDaoImp.findUserByRole(UserRole.TRAINER);
+		List<UserDto> dtos = userUtill.getUserDto(users);
+		ResponseStructure<List<UserDto>> structure = new ResponseStructure<>();
+		structure.setBody(dtos);
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("Found");
+		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
 	}
 
 //	@Override

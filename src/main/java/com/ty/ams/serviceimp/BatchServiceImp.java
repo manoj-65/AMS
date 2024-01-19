@@ -1,6 +1,7 @@
 package com.ty.ams.serviceimp;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ import com.ty.ams.exceptionclasses.batch.NoSuchBatchModeFoundException;
 import com.ty.ams.exceptionclasses.batch.StartedDateInvalidException;
 import com.ty.ams.exceptionclasses.batch.SubjectNameNotFoundExcpetion;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
+import com.ty.ams.exceptionclasses.user.UserNotFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.BatchService;
 import com.ty.ams.util.BatchMode;
@@ -50,12 +52,26 @@ public class BatchServiceImp implements BatchService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch) {
-		ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
-		responseStructure.setBody(batchDao.saveBatch(batch));
-		responseStructure.setMessage("Batch created Successfully");
-		responseStructure.setStatusCode(HttpStatus.CREATED.value());
-		return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch, int userId) {
+		Optional<User> optional = userDaoImp.findUserById(userId);
+		if (optional.isPresent()) {
+			User user = optional.get();
+			batch.setUser(user);
+			batch = batchDao.saveBatch(batch);
+			List<Batch> batches = user.getBatchs();
+			if (batches == null) {
+				batches = new ArrayList<>();
+			}
+			batches.add(batch);
+			user.setBatchs(batches);
+			userDaoImp.saveUser(user);
+			ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
+			responseStructure.setBody(batch);
+			responseStructure.setMessage("Batch created Successfully");
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
+		}
+		throw new UserNotFoundException("User With the Given Id " + userId + " Not Found");
 	}
 
 	@Override
