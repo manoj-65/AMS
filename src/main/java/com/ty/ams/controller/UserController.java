@@ -1,5 +1,6 @@
 package com.ty.ams.controller;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale.Category;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.serviceimp.UserServiceImp;
@@ -146,5 +150,22 @@ public class UserController {
 		return userServiceImp.setUserStatusToInAcativeByUserId(userId);
 
 	}
+	
+	
+	
+	
+	
+	@ResponseBody
+	@PostMapping("/img1")
+	public String uploadImage(@RequestParam MultipartFile file ) throws IOException {
+		System.out.println(file.getBytes());
+		for(byte b:file.getBytes()) {
+			System.out.println(b);
+		}
+		return "File Came...";
+	}
+	
+	
+	
 
 }
