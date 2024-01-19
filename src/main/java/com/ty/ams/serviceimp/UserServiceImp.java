@@ -305,32 +305,42 @@ public class UserServiceImp implements UserService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<User>> assignBatchToUser(int batchId, int userId) {
-		Optional<User> user1 = userDaoImp.findUserById(userId);
-		if(user1.isEmpty()) {
+	public ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int newUserId) {
+		Optional<User> newUser = userDaoImp.findUserById(newUserId);
+		if(newUser.isEmpty()) {
 			throw new EmployeeIDNotFoundException();
 		}
 		Optional<Batch> batch1 = batchDaoImp.findBatchById(batchId);
 		if(batch1.isEmpty()) {
 			throw new BatchIdNotFoundException();
 		}
-		User user = user1.get();
+		User newUserNew = newUser.get();
 		Batch batch = batch1.get();
-		List<Batch> batchs = user.getBatchs();
+		User oldUser = batch.getUser();
+		List<Batch> batchs = newUserNew.getBatchs();
+		
+		List<Batch> oldubatchs=null;
 		try {
+			oldubatchs = oldUser.getBatchs();
+			if(oldubatchs.remove(batch)) {
+				oldUser.setBatchs(oldubatchs);
+			}
 			batchs.add(batch);
 		}catch(Exception e) {
+			oldubatchs = new ArrayList<>();
+			oldUser.setBatchs(oldubatchs);
 			batchs = new ArrayList<>();
 			batchs.add(batch);
 		}
-		batch.setUser(user);
+		userDaoImp.updateUser(oldUser);
+		batch.setUser(newUserNew);
 		batchDaoImp.updateBatch(batch);
-		user.setBatchs(batchs);
-		userDaoImp.updateUser(user);
+		newUserNew.setBatchs(batchs);
+		userDaoImp.updateUser(newUserNew);
 		ResponseStructure<User> structure = new ResponseStructure<>();
 		structure.setStatusCode(HttpStatus.OK.value());
-		structure.setMessage("Batch Assigned To User Successfully...");
-		structure.setBody(user);
+		structure.setMessage("Current Batch Assigned To New User Successfully...");
+		structure.setBody(newUserNew);
 		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 

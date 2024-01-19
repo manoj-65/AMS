@@ -25,6 +25,7 @@ import com.ty.ams.util.BatchStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/batch")
@@ -39,6 +40,7 @@ public class BatchController {
 	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch, @RequestParam int userId) {
 		return batchService.saveBatch(batch, userId);
 	}
+
 	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database..")
 	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
@@ -70,6 +72,7 @@ public class BatchController {
 	public ResponseEntity<ResponseStructure<String>> deleteBatch(@PathVariable int batchId) {
 		return batchService.deleteBatch(batchId);
 	}
+
 // no need
 	@Operation(description = "Fetch / Find All Batches in the Database...", summary = "To Fetch All The Batches From The Database")
 	@ApiResponses(value = { @ApiResponse(description = "All Batches Found Successfully...", responseCode = "200"),
