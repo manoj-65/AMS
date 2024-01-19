@@ -39,6 +39,13 @@ public class BatchController {
 	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch, @RequestParam int userId) {
 		return batchService.saveBatch(batch, userId);
 	}
+	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database..")
+	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
+			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
+	@PostMapping("/save")
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch) {
+		return batchService.saveBatch(batch);
+	}
 
 	@Operation(description = "Fetching / Find Batch by batchId", summary = "To Find Batch Object By batchId...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Found Successfully", responseCode = "200"),
