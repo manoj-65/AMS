@@ -50,7 +50,7 @@ public interface UserService {
 
 	ResponseEntity<ResponseStructure<List<UserDto>>> findAllTrainersToAssiginBatch();
 	
-	ResponseEntity<ResponseStructure<User>> assignBatchToUser(int batchId, int  userId);
+	ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int  userId);
 	
 
 }

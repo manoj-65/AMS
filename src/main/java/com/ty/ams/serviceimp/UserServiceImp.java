@@ -303,34 +303,45 @@ public class UserServiceImp implements UserService {
 		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
 	}
 
+
 	@Override
-	public ResponseEntity<ResponseStructure<User>> assignBatchToUser(int batchId, int userId) {
-		Optional<User> user1 = userDaoImp.findUserById(userId);
-		if(user1.isEmpty()) {
-			throw new EmployeeIDNotFoundException();
-		}
-		Optional<Batch> batch1 = batchDaoImp.findBatchById(batchId);
-		if(batch1.isEmpty()) {
-			throw new BatchIdNotFoundException();
-		}
-		User user = user1.get();
-		Batch batch = batch1.get();
-		List<Batch> batchs = user.getBatchs();
-		try {
-			batchs.add(batch);
-		}catch(Exception e) {
-			batchs = new ArrayList<>();
-			batchs.add(batch);
-		}
-		batch.setUser(user);
-		batchDaoImp.updateBatch(batch);
-		user.setBatchs(batchs);
-		userDaoImp.updateUser(user);
-		ResponseStructure<User> structure = new ResponseStructure<>();
-		structure.setStatusCode(HttpStatus.OK.value());
-		structure.setMessage("Batch Assigned To User Successfully...");
-		structure.setBody(user);
-		return new ResponseEntity<>(structure, HttpStatus.OK);
+	public ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int newUserId) {
+	    Optional<User> newUser = userDaoImp.findUserById(newUserId);
+	    Optional<Batch> batch = batchDaoImp.findBatchById(batchId);
+
+	    if (newUser.isEmpty()) {
+	        throw new EmployeeIDNotFoundException();
+	    }
+
+	    if (batch.isEmpty()) {
+	        throw new BatchIdNotFoundException();
+	    }
+
+	    User newUserNew = newUser.get();
+	    Batch batchToReassign = batch.get();
+	    User oldUser = batchToReassign.getUser();
+
+	    List<Batch> newUserBatches = newUserNew.getBatchs();
+	    List<Batch> oldUserBatches = oldUser.getBatchs();
+
+	    if (oldUserBatches != null && oldUserBatches.remove(batchToReassign)) {
+	        oldUser.setBatchs(oldUserBatches);
+	        userDaoImp.updateUser(oldUser);
+	    }
+
+	    newUserBatches.add(batchToReassign);
+	    newUserNew.setBatchs(newUserBatches);
+	    userDaoImp.updateUser(newUserNew);
+
+	    batchToReassign.setUser(newUserNew);
+	    batchDaoImp.updateBatch(batchToReassign);
+
+	    ResponseStructure<User> structure = new ResponseStructure<>();
+	    structure.setStatusCode(HttpStatus.OK.value());
+	    structure.setMessage("Current Batch Assigned To New User Successfully...");
+	    structure.setBody(newUserNew);
+
+	    return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 //	@Override

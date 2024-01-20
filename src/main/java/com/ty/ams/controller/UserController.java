@@ -178,11 +178,8 @@ public class UserController {
 	@Operation(summary = "To Assign A batch To User", description = "The batchID and userID will be sent as RequestParameters with key batchId and userID")
 	@ApiResponses(value = {@ApiResponse(description="User Will be Assigned With The Given Batch Id ",responseCode = "200"),@ApiResponse(description = "Unable To Assign Batch To User Invalid User Id or Batch Id, Bad Request...",responseCode = "400")})
 	@PostMapping("/reassignbatch")
-	public ResponseEntity<ResponseStructure<User>> assignBatchToUserByBatchIdaAndUserId(@RequestParam int batchId, @RequestParam int userId){
-		return userServiceImp.assignBatchToUser(batchId, userId);
+	public ResponseEntity<ResponseStructure<User>> assignBatchToUserByBatchIdaAndUserId(@RequestParam int batchId, @RequestParam int newUserId){
+		return userServiceImp.reAssignBatchToUser(batchId, newUserId);
 	}
 	
-	
-	
-
 }
