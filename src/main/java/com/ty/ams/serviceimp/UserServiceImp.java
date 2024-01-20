@@ -58,7 +58,6 @@ public class UserServiceImp implements UserService {
 		user = userDaoImp.saveUser(user);
 
 		// sending email
-
 		Map<String, Object> user_map = new HashMap<>();
 		user_map.put("userName", user.getName());
 		user_map.put("userEmail", user.getEmail());
@@ -66,7 +65,7 @@ public class UserServiceImp implements UserService {
 		MailRequest request = new MailRequest();
 		request.setName(user.getName());
 		request.setSubject("your account has been created successfully");
-		request.setFrom("podichervupavansai@gmail.com");
+		request.setFrom("swiftshoppapp@gmail.com");
 		request.setTo(user.getEmail());
 		senderService.sendEmail(request, user_map);
 

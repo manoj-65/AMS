@@ -67,10 +67,10 @@ public class ExcelService {
 			int dataRow = 7;
 			for (Attendance attendance : currentMonthAttendances) {
 				HSSFRow dataRows = sheet.createRow(dataRow);
-				dataRows.createCell(0).setCellValue(attendance.getDate());
-				dataRows.createCell(1).setCellValue(attendance.getDate().getDayOfWeek() + "");
-				dataRows.createCell(2).setCellValue(attendance.getLoginTime() + "");
-				dataRows.createCell(3).setCellValue(attendance.getLogoutTime() + "");
+				dataRows.createCell(0).setCellValue(attendance.getLoginDateandTime().getDayOfMonth());
+				dataRows.createCell(1).setCellValue(attendance.getLoginDateandTime().getDayOfWeek() + "");
+				dataRows.createCell(2).setCellValue(attendance.getLoginDateandTime() + "");
+				dataRows.createCell(3).setCellValue(attendance.getLogoutDateandTime() + "");
 				dataRows.createCell(4).setCellValue(attendance.getAttendanceStatus() + "");
 				dataRows.createCell(5).setCellValue(attendance.getTotalWorkingHours() + "");
 //				List<Batch> batches = attendance.getBatchs();
