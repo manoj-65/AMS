@@ -13,13 +13,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ty.ams.daoimp.BatchDaoImp;
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.dto.MailRequest;
 import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.batch.BatchIdNotFoundException;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
+import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
@@ -36,6 +39,8 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
+	@Autowired
+	private BatchDaoImp batchDaoImp;
 	@Autowired(required = true)
 	private EmailSenderService senderService;
 	@Autowired
@@ -297,6 +302,47 @@ public class UserServiceImp implements UserService {
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("Found");
 		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
+	}
+
+
+	@Override
+	public ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int newUserId) {
+	    Optional<User> newUser = userDaoImp.findUserById(newUserId);
+	    Optional<Batch> batch = batchDaoImp.findBatchById(batchId);
+
+	    if (newUser.isEmpty()) {
+	        throw new EmployeeIDNotFoundException();
+	    }
+
+	    if (batch.isEmpty()) {
+	        throw new BatchIdNotFoundException();
+	    }
+
+	    User newUserNew = newUser.get();
+	    Batch batchToReassign = batch.get();
+	    User oldUser = batchToReassign.getUser();
+
+	    List<Batch> newUserBatches = newUserNew.getBatchs();
+	    List<Batch> oldUserBatches = oldUser.getBatchs();
+
+	    if (oldUserBatches != null && oldUserBatches.remove(batchToReassign)) {
+	        oldUser.setBatchs(oldUserBatches);
+	        userDaoImp.updateUser(oldUser);
+	    }
+
+	    newUserBatches.add(batchToReassign);
+	    newUserNew.setBatchs(newUserBatches);
+	    userDaoImp.updateUser(newUserNew);
+
+	    batchToReassign.setUser(newUserNew);
+	    batchDaoImp.updateBatch(batchToReassign);
+
+	    ResponseStructure<User> structure = new ResponseStructure<>();
+	    structure.setStatusCode(HttpStatus.OK.value());
+	    structure.setMessage("Current Batch Assigned To New User Successfully...");
+	    structure.setBody(newUserNew);
+
+	    return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 //	@Override
