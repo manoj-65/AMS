@@ -1,6 +1,6 @@
 package com.ty.ams.controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.responsestructure.ResponseStructure;
-import com.ty.ams.serviceimp.AttendanceServiceImp;
+import com.ty.ams.service.AttendanceService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,15 +29,23 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class AttendanceController {
 
 	@Autowired
-	AttendanceServiceImp service;
+	AttendanceService service;
 
-	@Operation(description = "Attendance Object Will be Saved...", summary = "To Save Attendance object to the Database...")
-	@ApiResponses(value = { @ApiResponse(description = "Attendance Saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save Attendance To Database", responseCode = "409") })
-	@PostMapping("/{userId}")
+	@Operation(description = "To Mark Login Timings", summary = "To Mark The Login Timings By Creating The Attendance Object, in Path variable userId should be thier and in body Attendance JSON Object should be Their...")
+	@ApiResponses(value = { @ApiResponse(description = "Login Time Marked Successfully...", responseCode = "200"),
+			@ApiResponse(description = "Unable To Mark Login Timings...", responseCode = "204") })
+	@PostMapping("/login/{userId}")
 	public ResponseEntity<ResponseStructure<Attendance>> saveAttendance(@RequestBody Attendance attendance,
 			@PathVariable int userId) {
 		return service.saveAttendance(attendance, userId);
+	}
+
+	@Operation(description = "To Mark Logout Timings", summary = "To Mark The Logout Timings By Updating Attendance, Attendance Object Must and Should Have Id of the Attendance Object (ie. attendanceId) in JSON Format")
+	@ApiResponses(value = { @ApiResponse(description = "Logout Time Marked Successfully...", responseCode = "200"),
+			@ApiResponse(description = "Unable To Mark Logout Timings...", responseCode = "204") })
+	@PutMapping("/logout")
+	public ResponseEntity<ResponseStructure<Attendance>> updateAttendance(@RequestBody Attendance attendance) {
+		return service.updateAttandance(attendance);
 	}
 
 	@Operation(description = "To find the attendance based on the Id", summary = "To find the Attendance Object from the data base")
@@ -46,14 +54,6 @@ public class AttendanceController {
 	@GetMapping("/{attendanceId}")
 	public ResponseEntity<ResponseStructure<Attendance>> findAttendanceById(@PathVariable int attendanceId) {
 		return service.findAttandanceById(attendanceId);
-	}
-
-	@Operation(description = "To update the Attendance Object", summary = "To find the Attendance Object from the data base and to update")
-	@ApiResponses(value = { @ApiResponse(description = "Attendance found Successfully", responseCode = "200"),
-			@ApiResponse(description = "Unable to Update", responseCode = "204") })
-	@PutMapping
-	public ResponseEntity<ResponseStructure<Attendance>> updateAttendance(@RequestBody Attendance attendance) {
-		return service.updateAttandance(attendance);
 	}
 
 	@Operation(description = "To Delete the Attendance Object", summary = "To find the Attendance Object from the data base and to delete")
@@ -77,7 +77,7 @@ public class AttendanceController {
 	@ApiResponses(value = { @ApiResponse(description = "Attendances Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable Find Attendance", responseCode = "204") })
 	@GetMapping("/date/{date}")
-	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByDate(@PathVariable LocalDate date) {
+	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByDate(@PathVariable LocalDateTime date) {
 		return service.findAllAttendenceByDate(date);
 	}
 
@@ -86,7 +86,7 @@ public class AttendanceController {
 			@ApiResponse(description = "Unable Find Attendance", responseCode = "204") })
 	@GetMapping("/status/{attendanceStatus}/{date}")
 	public ResponseEntity<ResponseStructure<List<Attendance>>> findAllAttendanceByStatusAndDate(
-			@PathVariable String attendanceStatus, @PathVariable LocalDate date) {
+			@PathVariable String attendanceStatus, @PathVariable LocalDateTime date) {
 		return service.findAllAttendanceByAttendanceStatusAndDate(attendanceStatus, date);
 	}
 

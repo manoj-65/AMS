@@ -1,12 +1,15 @@
 package com.ty.ams.dao;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.ty.ams.entity.Attendance;
 import com.ty.ams.util.AttendanceStatus;
-
+@Repository
 public interface AttendanceDao {
 
 	public Attendance saveAttendance(Attendance attendance);
@@ -19,8 +22,9 @@ public interface AttendanceDao {
 
 	public List<Attendance> findAllAttendanceByAttendanceStatus(AttendanceStatus status);
 
-	public List<Attendance> findAllAttendenceByDate(LocalDate date);
 
-	public List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDate date);
+	List<Attendance> findAllAttendenceByDate(LocalDateTime date);
+
+	List<Attendance> findAllAttendanceByAttendanceStatusAndDate(AttendanceStatus status, LocalDateTime date);
 
 }
