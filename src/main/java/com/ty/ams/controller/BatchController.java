@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ty.ams.entity.Batch;
+import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.BatchService;
+import com.ty.ams.service.UserService;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
 
@@ -26,29 +26,43 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/batch")
 public class BatchController {
 	@Autowired
 	private BatchService batchService;
+	
+	@Autowired
+	private UserService userService;
 
+	//Before It Was Their now I Created One new Method which is their down side
+	
 	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database..")
 	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
 			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
 	@PostMapping
-	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch, @RequestParam int userId) {
-		return batchService.saveBatch(batch, userId);
-	}
-
-	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database..")
-	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
-			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
-	@PostMapping("/save")
 	public ResponseEntity<ResponseStructure<Batch>> saveBatch(@RequestBody Batch batch) {
 		return batchService.saveBatch(batch);
 	}
+	
+	@Operation(description = "To Create A Batch, &nbsp;&nbsp;&nbsp;&nbsp;  and All Trainers Details Who Handeling Less than 4 batchs", summary = "To Save Batch Object to Database... allong with Trainers Details...")
+	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
+			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
+	@GetMapping("/create")
+	public ResponseEntity<ResponseStructure<List<User>>> createBatch() {
+		return userService.findAllTrainersToCreateBatch();
+	}
+	
+	@Operation(description = "Batch Object will be saved..", summary = "To Save Batch Object to Database... Have to Pass The Batch Object in JSON Formate and userId as Path Variable")
+	@ApiResponses(value = { @ApiResponse(description = "Batch saved Successfully", responseCode = "201"),
+			@ApiResponse(description = "Unable To Save Batch To Database", responseCode = "409") })
+	@PostMapping("/{userId}")
+	public ResponseEntity<ResponseStructure<User>> saveBatch(@RequestBody Batch batch, @PathVariable int userId) {
+		return batchService.saveBatch(batch, userId);
+	}
 
+	
+	
 	@Operation(description = "Fetching / Find Batch by batchId", summary = "To Find Batch Object By batchId...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find Batch for Provided batchId...", responseCode = "404") })
@@ -73,7 +87,6 @@ public class BatchController {
 		return batchService.deleteBatch(batchId);
 	}
 
-// no need
 	@Operation(description = "Fetch / Find All Batches in the Database...", summary = "To Fetch All The Batches From The Database")
 	@ApiResponses(value = { @ApiResponse(description = "All Batches Found Successfully...", responseCode = "200"),
 			@ApiResponse(description = "No Batches Found in Database...", responseCode = "200"),
@@ -102,7 +115,7 @@ public class BatchController {
 	@Operation(description = "Fetching / Find Batch by SubjectName And BatchStatus", summary = "To Find Batch Object By SubjectName And BatchStatus...")
 	@ApiResponses(value = { @ApiResponse(description = "Batch Found Successfully", responseCode = "200"),
 			@ApiResponse(description = "Unable To Find Batch for Provided SubjectName And BatchStatus...", responseCode = "404") })
-	@GetMapping("/subjectname-status/{subjectName}/{status}")
+	@GetMapping("/subjectname-name/{subjectName}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchBySubjectNameAndBatchStatus(
 			@PathVariable String subjectName, @PathVariable BatchStatus status) {
 		return batchService.findBatchBySubjectNameAndBatchStatus(subjectName, status);
@@ -130,6 +143,7 @@ public class BatchController {
 	@GetMapping("/userid-status/{userId}/{status}")
 	public ResponseEntity<ResponseStructure<List<Batch>>> findBatchByUserIdAndBatchStatus(@PathVariable int userId,
 			@PathVariable BatchStatus status) {
+
 		return batchService.findBatchByUserIdAndBatchStatus(userId, status);
 	}
 
@@ -141,4 +155,5 @@ public class BatchController {
 			@PathVariable LocalDate toDate) {
 		return batchService.findBatchBetweenDates(fromDate, toDate);
 	}
+	
 }

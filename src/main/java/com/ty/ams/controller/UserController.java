@@ -182,4 +182,6 @@ public class UserController {
 		return userServiceImp.reAssignBatchToUser(batchId, newUserId);
 	}
 	
+	
+	
 }

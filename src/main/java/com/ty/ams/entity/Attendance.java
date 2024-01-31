@@ -29,6 +29,10 @@ public class Attendance {
 	private LocalDateTime loginDateandTime;
 	private LocalDateTime logoutDateandTime;
 	private String location;
+	private String landMark;
+	private String city;
+	private String state;
+	private String country;
 	@Enumerated(EnumType.STRING)
 	private AttendanceStatus attendanceStatus;
 	private double totalWorkingHours;
