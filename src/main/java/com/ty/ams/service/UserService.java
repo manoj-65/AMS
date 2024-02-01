@@ -51,6 +51,8 @@ public interface UserService {
 	ResponseEntity<ResponseStructure<List<UserDto>>> findAllTrainersToAssiginBatch();
 	
 	ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int  userId);
+
+	ResponseEntity<ResponseStructure<List<User>>> findAllTrainersToCreateBatch();
 	
 
 }

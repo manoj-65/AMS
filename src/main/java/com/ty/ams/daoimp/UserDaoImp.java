@@ -22,13 +22,11 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public User saveUser(User user) {
-		// TODO Auto-generated method stub
 		return userRepository.save(user);
 	}
 
 	@Override
 	public User updateUser(User user) {
-		// TODO Auto-generated method stub
 		return userRepository.save(user);
 	}
 
@@ -50,61 +48,51 @@ public class UserDaoImp implements UserDao {
 
 	@Override
 	public List<User> findUserByRole(UserRole role) {
-		// TODO Auto-generated method stub
 		return userRepository.findByUserRole(role);
 	}
 
 	@Override
 	public List<User> findUserByCategory(UserCategory category) {
-		// TODO Auto-generated method stub
 		return userRepository.findByUserCategory(category);
 	}
 
 	@Override
 	public List<User> findAllUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
 
 	@Override
 	public Optional<User> findUserByPhoneNumber(long phone) {
-		// TODO Auto-generated method stub
 		return userRepository.findByPhone(phone);
 	}
 
 	@Override
 	public Optional<User> findUserByEmail(String email) {
-		// TODO Auto-generated method stub
 		return userRepository.findByEmail(email);
 	}
 
 	@Override
 	public List<User> findUserByStatus(UserStatus status) {
-		// TODO Auto-generated method stub
 		return userRepository.findByUserStatus(status);
 	}
 
 	@Override
 	public Optional<User> findUserByEmailAndPassword(String email, String password) {
-		// TODO Auto-generated method stub
 		return userRepository.findByEmailAndPassword(email, password);
 	}
 
 	@Override
 	public User findUserByPhoneAndPassword(long phone, String password) {
-		// TODO Auto-generated method stub
 		return userRepository.findByPhoneAndPassword(phone, password).get();
 	}
 
 	@Override
 	public List<User> findAllActiveUsers() {
-		// TODO Auto-generated method stub
-		return userRepository.findAllInActiveUsers();
+		return userRepository.findByAllActiveUsers();
 	}
 
 	@Override
 	public List<User> findAllInActiveUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.findAllInActiveUsers();
 	}
 

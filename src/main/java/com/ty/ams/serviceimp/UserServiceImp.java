@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -342,6 +343,18 @@ public class UserServiceImp implements UserService {
 	    structure.setBody(newUserNew);
 
 	    return new ResponseEntity<>(structure, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<List<User>>> findAllTrainersToCreateBatch() {
+		List<User> users = userDaoImp.findAllActiveUsers();
+		List<User> trainers = users.stream().filter(u->u.getUserRole().toString().equalsIgnoreCase("TRAINER")).filter(u->u.getBatchs().size()<4).collect(Collectors.toList());
+		System.out.println(trainers);
+		 ResponseStructure<List<User>> structure = new ResponseStructure<>();
+		    structure.setStatusCode(HttpStatus.OK.value());
+		    structure.setMessage("All Trainers Found Who Handling Less than 4 Batchs...");
+		    structure.setBody(trainers);
+		    return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 //	@Override
