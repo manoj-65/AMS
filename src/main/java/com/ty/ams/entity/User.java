@@ -8,6 +8,7 @@ import com.ty.ams.util.UserCategory;
 import com.ty.ams.util.UserRole;
 import com.ty.ams.util.UserStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,7 +50,9 @@ public class User {
 	private UserCategory userCategory;
 	@OneToMany
 	private List<TimeSheet> timeSheets;
-	@OneToMany//(cascade = CascadeType.ALL)
+	@OneToMany // (cascade = CascadeType.ALL)
 	private List<Batch> batchs;
-	
+	@OneToOne(cascade = CascadeType.ALL)
+	private UserProfile userProfile;
+
 }
