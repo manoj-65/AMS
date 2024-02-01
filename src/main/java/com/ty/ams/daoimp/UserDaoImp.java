@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ty.ams.dao.UserDao;
-import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
 import com.ty.ams.repository.UserRepository;
 import com.ty.ams.util.UserCategory;
