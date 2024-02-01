@@ -22,6 +22,7 @@ public class ImageController {
 	@Autowired
 	ImageService imageService;
 
+	//need to take useId also
 	@PostMapping("/saveImage")
 	public ResponseEntity<ResponseStructure<Image>> uploadImage(@RequestParam MultipartFile file) throws IOException {
 		Image image = new Image();

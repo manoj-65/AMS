@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.ty.ams.entity.Batch;
+import com.ty.ams.entity.User;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.util.BatchMode;
 import com.ty.ams.util.BatchStatus;
@@ -13,7 +14,9 @@ import com.ty.ams.util.BatchStatus;
 public interface BatchService {
 	ResponseEntity<ResponseStructure<Batch>> findBatchById(int batchId);
 
-	ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch, int userId);
+	ResponseEntity<ResponseStructure<User>> saveBatch(Batch batch, int userId);
+	
+	ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch);
 
 	ResponseEntity<ResponseStructure<Batch>> updateBatch(Batch batch);
 

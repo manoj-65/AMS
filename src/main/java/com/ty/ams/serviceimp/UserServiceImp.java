@@ -7,19 +7,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.ty.ams.daoimp.BatchDaoImp;
 import com.ty.ams.daoimp.UserDaoImp;
 import com.ty.ams.dto.MailRequest;
 import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
+import com.ty.ams.exceptionclasses.batch.BatchIdNotFoundException;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
+import com.ty.ams.exceptionclasses.user.EmployeeIDNotFoundException;
 import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
@@ -36,6 +40,8 @@ public class UserServiceImp implements UserService {
 
 	@Autowired
 	private UserDaoImp userDaoImp;
+	@Autowired
+	private BatchDaoImp batchDaoImp;
 	@Autowired(required = true)
 	private EmailSenderService senderService;
 	@Autowired
@@ -53,7 +59,6 @@ public class UserServiceImp implements UserService {
 		user = userDaoImp.saveUser(user);
 
 		// sending email
-
 		Map<String, Object> user_map = new HashMap<>();
 		user_map.put("userName", user.getName());
 		user_map.put("userEmail", user.getEmail());
@@ -61,7 +66,7 @@ public class UserServiceImp implements UserService {
 		MailRequest request = new MailRequest();
 		request.setName(user.getName());
 		request.setSubject("your account has been created successfully");
-		request.setFrom("podichervupavansai@gmail.com");
+		request.setFrom("swiftshoppapp@gmail.com");
 		request.setTo(user.getEmail());
 		senderService.sendEmail(request, user_map);
 
@@ -297,6 +302,59 @@ public class UserServiceImp implements UserService {
 		structure.setStatusCode(HttpStatus.OK.value());
 		structure.setMessage("Found");
 		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
+	}
+
+
+	@Override
+	public ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int newUserId) {
+	    Optional<User> newUser = userDaoImp.findUserById(newUserId);
+	    Optional<Batch> batch = batchDaoImp.findBatchById(batchId);
+
+	    if (newUser.isEmpty()) {
+	        throw new EmployeeIDNotFoundException();
+	    }
+
+	    if (batch.isEmpty()) {
+	        throw new BatchIdNotFoundException();
+	    }
+
+	    User newUserNew = newUser.get();
+	    Batch batchToReassign = batch.get();
+	    User oldUser = batchToReassign.getUser();
+
+	    List<Batch> newUserBatches = newUserNew.getBatchs();
+	    List<Batch> oldUserBatches = oldUser.getBatchs();
+
+	    if (oldUserBatches != null && oldUserBatches.remove(batchToReassign)) {
+	        oldUser.setBatchs(oldUserBatches);
+	        userDaoImp.updateUser(oldUser);
+	    }
+
+	    newUserBatches.add(batchToReassign);
+	    newUserNew.setBatchs(newUserBatches);
+	    userDaoImp.updateUser(newUserNew);
+
+	    batchToReassign.setUser(newUserNew);
+	    batchDaoImp.updateBatch(batchToReassign);
+
+	    ResponseStructure<User> structure = new ResponseStructure<>();
+	    structure.setStatusCode(HttpStatus.OK.value());
+	    structure.setMessage("Current Batch Assigned To New User Successfully...");
+	    structure.setBody(newUserNew);
+
+	    return new ResponseEntity<>(structure, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<ResponseStructure<List<User>>> findAllTrainersToCreateBatch() {
+		List<User> users = userDaoImp.findAllActiveUsers();
+		List<User> trainers = users.stream().filter(u->u.getUserRole().toString().equalsIgnoreCase("TRAINER")).filter(u->u.getBatchs().size()<4).collect(Collectors.toList());
+		System.out.println(trainers);
+		 ResponseStructure<List<User>> structure = new ResponseStructure<>();
+		    structure.setStatusCode(HttpStatus.OK.value());
+		    structure.setMessage("All Trainers Found Who Handling Less than 4 Batchs...");
+		    structure.setBody(trainers);
+		    return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 //	@Override

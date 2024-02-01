@@ -1,7 +1,6 @@
 package com.ty.ams.entity;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.ty.ams.util.AttendanceStatus;
@@ -27,12 +26,23 @@ public class Attendance {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int attendanceId;
-	private LocalDate date;
-	private LocalTime loginTime;
-	private LocalTime logoutTime;
+	private LocalDateTime loginDateandTime;
+	private LocalDateTime logoutDateandTime;
+	private String location;
+	private String landMark;
+	private String city;
+	private String state;
+	private String country;
 	@Enumerated(EnumType.STRING)
 	private AttendanceStatus attendanceStatus;
 	private double totalWorkingHours;
 	@ManyToMany
 	private List<Batch> batchs;
+	
+	
+//	private LocalDate date;
+//	private LocalTime loginTime;
+//	private LocalTime logoutTime;
+//	private String loginLocation;
+//	private String logoutLocation;
 }

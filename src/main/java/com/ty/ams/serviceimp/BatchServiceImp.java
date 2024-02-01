@@ -52,26 +52,33 @@ public class BatchServiceImp implements BatchService {
 	}
 
 	@Override
-	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch, int userId) {
+	public ResponseEntity<ResponseStructure<User>> saveBatch(Batch batch, int userId) {
 		Optional<User> optional = userDaoImp.findUserById(userId);
-		if (optional.isPresent()) {
-			User user = optional.get();
-			batch.setUser(user);
-			batch = batchDao.saveBatch(batch);
-			List<Batch> batches = user.getBatchs();
-			if (batches == null) {
-				batches = new ArrayList<>();
-			}
-			batches.add(batch);
-			user.setBatchs(batches);
-			userDaoImp.saveUser(user);
+		if(optional.isEmpty())
+			throw new UserNotFoundException("Unable To Find The User with userId : "+userId);
+		User user = optional.get();
+		List<Batch> batchs = user.getBatchs();
+		if(batchs.isEmpty())
+			batchs = new ArrayList<>();
+		batch = batchDao.saveBatch(batch);
+		batchs.add(batch);
+		user.setBatchs(batchs);
+		batch.setUser(user);
+		user = userDaoImp.updateUser(user);
+		ResponseStructure<User> responseStructure = new ResponseStructure<>();
+		responseStructure.setBody(user);
+		responseStructure.setMessage("Batch created Successfully.. for The User Id  : "+userId);
+		responseStructure.setStatusCode(HttpStatus.CREATED.value());
+		return new ResponseEntity<>(responseStructure, HttpStatus.CREATED);
+	}
+	@Override
+	public ResponseEntity<ResponseStructure<Batch>> saveBatch(Batch batch) {
 			ResponseStructure<Batch> responseStructure = new ResponseStructure<Batch>();
+			batchDao.saveBatch(batch);
 			responseStructure.setBody(batch);
 			responseStructure.setMessage("Batch created Successfully");
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
 			return new ResponseEntity<ResponseStructure<Batch>>(responseStructure, HttpStatus.CREATED);
-		}
-		throw new UserNotFoundException("User With the Given Id " + userId + " Not Found");
 	}
 
 	@Override
