@@ -1,5 +1,7 @@
 package com.ty.ams.serviceimp;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,9 +12,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ty.ams.daoimp.BatchDaoImp;
 import com.ty.ams.daoimp.UserDaoImp;
@@ -20,6 +24,7 @@ import com.ty.ams.dto.MailRequest;
 import com.ty.ams.dto.UserDto;
 import com.ty.ams.entity.Batch;
 import com.ty.ams.entity.User;
+import com.ty.ams.entity.UserProfile;
 import com.ty.ams.exceptionclasses.batch.BatchIdNotFoundException;
 import com.ty.ams.exceptionclasses.user.DuplicateEmailException;
 import com.ty.ams.exceptionclasses.user.DuplicatePhoneNumberException;
@@ -28,6 +33,7 @@ import com.ty.ams.exceptionclasses.user.IdNotFoundException;
 import com.ty.ams.exceptionclasses.user.InvalidEmailOrPasswordException;
 import com.ty.ams.exceptionclasses.user.InvalidPhoneNumberException;
 import com.ty.ams.exceptionclasses.user.NoUserFoundException;
+import com.ty.ams.exceptionclasses.user.UserNotFoundException;
 import com.ty.ams.responsestructure.ResponseStructure;
 import com.ty.ams.service.UserService;
 import com.ty.ams.util.UserCategory;
@@ -46,6 +52,9 @@ public class UserServiceImp implements UserService {
 	private EmailSenderService senderService;
 	@Autowired
 	private UserUtill userUtill;
+
+	@Value("${file.upload-dir}")
+	private String uploadDir;
 
 	@Override
 	public ResponseEntity<ResponseStructure<User>> saveUser(User user) {
@@ -304,57 +313,104 @@ public class UserServiceImp implements UserService {
 		return new ResponseEntity<ResponseStructure<List<UserDto>>>(structure, HttpStatus.OK);
 	}
 
-
 	@Override
 	public ResponseEntity<ResponseStructure<User>> reAssignBatchToUser(int batchId, int newUserId) {
-	    Optional<User> newUser = userDaoImp.findUserById(newUserId);
-	    Optional<Batch> batch = batchDaoImp.findBatchById(batchId);
+		Optional<User> newUser = userDaoImp.findUserById(newUserId);
+		Optional<Batch> batch = batchDaoImp.findBatchById(batchId);
 
-	    if (newUser.isEmpty()) {
-	        throw new EmployeeIDNotFoundException();
-	    }
+		if (newUser.isEmpty()) {
+			throw new EmployeeIDNotFoundException();
+		}
 
-	    if (batch.isEmpty()) {
-	        throw new BatchIdNotFoundException();
-	    }
+		if (batch.isEmpty()) {
+			throw new BatchIdNotFoundException();
+		}
 
-	    User newUserNew = newUser.get();
-	    Batch batchToReassign = batch.get();
-	    User oldUser = batchToReassign.getUser();
+		User newUserNew = newUser.get();
+		Batch batchToReassign = batch.get();
+		User oldUser = batchToReassign.getUser();
 
-	    List<Batch> newUserBatches = newUserNew.getBatchs();
-	    List<Batch> oldUserBatches = oldUser.getBatchs();
+		List<Batch> newUserBatches = newUserNew.getBatchs();
+		List<Batch> oldUserBatches = oldUser.getBatchs();
 
-	    if (oldUserBatches != null && oldUserBatches.remove(batchToReassign)) {
-	        oldUser.setBatchs(oldUserBatches);
-	        userDaoImp.updateUser(oldUser);
-	    }
+		if (oldUserBatches != null && oldUserBatches.remove(batchToReassign)) {
+			oldUser.setBatchs(oldUserBatches);
+			userDaoImp.updateUser(oldUser);
+		}
 
-	    newUserBatches.add(batchToReassign);
-	    newUserNew.setBatchs(newUserBatches);
-	    userDaoImp.updateUser(newUserNew);
+		newUserBatches.add(batchToReassign);
+		newUserNew.setBatchs(newUserBatches);
+		userDaoImp.updateUser(newUserNew);
 
-	    batchToReassign.setUser(newUserNew);
-	    batchDaoImp.updateBatch(batchToReassign);
+		batchToReassign.setUser(newUserNew);
+		batchDaoImp.updateBatch(batchToReassign);
 
-	    ResponseStructure<User> structure = new ResponseStructure<>();
-	    structure.setStatusCode(HttpStatus.OK.value());
-	    structure.setMessage("Current Batch Assigned To New User Successfully...");
-	    structure.setBody(newUserNew);
+		ResponseStructure<User> structure = new ResponseStructure<>();
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("Current Batch Assigned To New User Successfully...");
+		structure.setBody(newUserNew);
 
-	    return new ResponseEntity<>(structure, HttpStatus.OK);
+		return new ResponseEntity<>(structure, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<ResponseStructure<List<User>>> findAllTrainersToCreateBatch() {
 		List<User> users = userDaoImp.findAllActiveUsers();
-		List<User> trainers = users.stream().filter(u->u.getUserRole().toString().equalsIgnoreCase("TRAINER")).filter(u->u.getBatchs().size()<4).collect(Collectors.toList());
+		List<User> trainers = users.stream().filter(u -> u.getUserRole().toString().equalsIgnoreCase("TRAINER"))
+				.filter(u -> u.getBatchs().size() < 4).collect(Collectors.toList());
 		System.out.println(trainers);
-		 ResponseStructure<List<User>> structure = new ResponseStructure<>();
-		    structure.setStatusCode(HttpStatus.OK.value());
-		    structure.setMessage("All Trainers Found Who Handling Less than 4 Batchs...");
-		    structure.setBody(trainers);
-		    return new ResponseEntity<>(structure, HttpStatus.OK);
+		ResponseStructure<List<User>> structure = new ResponseStructure<>();
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("All Trainers Found Who Handling Less than 4 Batchs...");
+		structure.setBody(trainers);
+		return new ResponseEntity<>(structure, HttpStatus.OK);
+	}
+
+	// To Upload the userProfiles
+	public ResponseEntity<ResponseStructure<String>> uploadImage(int userId, MultipartFile file) {
+
+		Optional<User> optional = userDaoImp.findUserById(userId);
+		if (optional.isPresent()) {
+			String data = file.getOriginalFilename();
+			String res = "";
+			for (int index = 0; index < data.length(); index++) {
+				if (data.charAt(index) == '.') {
+					res = data.substring(index, data.length());
+				}
+			}
+			String fileName = "Profile_" + res;
+			String filePath = uploadDir + "/" + userId + File.separator + fileName;
+
+			// Create the directory if it doesn't exist
+			File directory = new File(uploadDir + "/" + userId);
+			if (!directory.exists()) {
+				directory.mkdirs(); // Creates the directory including any necessary but nonexistent parent
+									// directories
+			}
+
+			try {
+				File profile = new File(filePath);
+				profile.setReadable(true, false);
+				file.transferTo(profile);
+			} catch (IllegalStateException | IOException e) {
+				e.printStackTrace();
+			}
+
+			User user = optional.get();
+			if (user.getUserProfile() == null) {
+				user.setUserProfile(new UserProfile());
+			}
+			user.getUserProfile().setProfilePath(filePath);
+			userDaoImp.updateUser(user);
+			ResponseStructure<String> responseStructure = new ResponseStructure<>();
+			responseStructure.setBody("Created");
+			responseStructure.setMessage("Profile Created");
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+
+			return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.CREATED);
+		}
+
+		throw new UserNotFoundException("User with the Given Id " + userId + " Not Found");
 	}
 
 //	@Override
